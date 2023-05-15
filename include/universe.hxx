@@ -25,7 +25,7 @@ private :
         std::vector<std::vector<Cell>> grid;
         //TODO: Use templates to define these
 public:
-        Universe(std::vector<Particle*>& particles, int dim, double rCut, double* LD);
+        Universe(std::vector<Particle*>& particles, int dim, double rCut, double* LD, double epsilon, double sigma);
 
         friend ostream& operator<<(ostream &o, const Universe &);
 

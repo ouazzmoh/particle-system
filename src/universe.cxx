@@ -6,7 +6,7 @@
 #include "universe.hxx"
 #include "cell.hxx"
 
-Universe::Universe(std::vector<Particle *> &particles, int dim, double rCut, double *lD) : particles(particles), rCut(rCut)
+Universe::Universe(std::vector<Particle *> &particles, int dim, double rCut, double *lD, double epsilon, double sigma) : particles(particles), rCut(rCut), epsilon(epsilon), sigma(sigma)
 {
     // Organize the particles in cells
     this->dim = dim;
@@ -77,6 +77,11 @@ void interactionForcesPotentiel(Universe & universe)
                                     if (rIJ < universe.rCut && rIJ > 0){
                                         double fIJMagnitude = 24 * universe.epsilon * (1/(rIJ*rIJ)) *
                                             pow((universe.sigma /rIJ), 6) * (1- 2 * pow((universe.sigma/rIJ), 6));
+                                        //TODO: Remove this
+                                        if (fIJMagnitude != 0) {
+                                            cout << fIJMagnitude << endl;
+                                        }
+
                                         particleI->force = particleI->force + rIJVect * fIJMagnitude;
                                     }
                                 }
@@ -106,8 +111,10 @@ void updateGrid(Universe &universe)
                     int y_cell = (int)(particle->getPosition().getY() / universe.rCut);
                     int z_cell = (int)(particle->getPosition().getZ() / universe.rCut);
                     //2D
-                    universe.grid[x_cell][y_cell].removeParticle(particle);
-                    universe.grid[x_cell][y_cell].particles.push_back(particle);//2D
+                    universe.grid[x][y].removeParticle(particle);
+                    if (x_cell >= 0 && x_cell < universe.nCD[0] && y_cell >= 0 && y_cell < universe.nCD[1]) {
+                        universe.grid[x_cell][y_cell].particles.push_back(particle);//2D
+                    }
                     //We set back the position to its initial state
                     particle->setCellPositionChanged(false);
                 }
@@ -141,7 +148,7 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
         t += deltaT;
         int index = 0;
 
-        for (auto &particleI : particleList)
+        for (auto particleI : particleList)
         {
             particleI->position =
                 particleI->position + (particleI->vitesse +
@@ -158,13 +165,13 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
         interactionForcesPotentiel(universe);
 
         index = 0; // will be reused after this
-        for (auto &particleI : particleList)
+        for (auto particleI : particleList)
         {
             particleI->vitesse = particleI->vitesse + (particleI->force + fOld[index]) *
                                                       deltaT * (0.5 / particleI->masse);
             index++;
         }
-        for (auto &particleI : particleList)
+        for (auto particleI : particleList)
         {
             outputStream << particleI->position << endl;
         }
