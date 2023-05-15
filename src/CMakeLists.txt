@@ -4,3 +4,4 @@
 add_library(particules particule.cxx)
 add_library(vecteur vecteur.cxx)
 add_library(universe universe.cxx)
+add_library(cell cell.cxx)

@@ -66,11 +66,8 @@ public:
         friend void calculateForces(vector<Particle*> &particleList);
         friend void calculateForcesSlow(vector<Particle*> &particleList);
         friend ostream& operator<<(ostream &o, const Particle &);
-        friend void calculate_interaction_forces_potentiel(Universe universe);
-        friend void stromerVerlet_potentiel(Universe universe, double tEnd, double deltaT,
-                                        ofstream &outputStream);
-        friend void interactionForcesPotentiel(Universe & universe);
 
+        friend void interactionForcesPotentiel(Universe & universe);
         friend void stromerVerletPotential(Universe & universe, double tEnd, double deltaT, ofstream &outputStream);
 
         void setCellPositionChanged(bool cellPositionChanged);

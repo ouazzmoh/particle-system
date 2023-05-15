@@ -1,8 +1,6 @@
 #include <iostream>
 #include <random>
 #include <list>
-#include <stdbool.h>
-#include <string>
 #include <chrono>
 #include <set>
 #include <cmath>
@@ -12,6 +10,7 @@
 #include "particule.hxx"
 #include "vecteur.hxx"
 #include "universe.hxx"
+#include "cell.hxx"
 using namespace std;
 
 /**

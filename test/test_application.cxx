@@ -20,7 +20,7 @@ int main() {
 
     //Blue Square
     for (int i = 0; i < 160; i++){
-        for ( int j = 0; j < 40; j ++) {
+        for ( int j = 0; j < 1; j ++) {
             string type = "nil";
             Particle *particleToInsert = new Particle(Vecteur(i , j, 0.0),
                                                       Vecteur(0.0, 0.0, 0.0), 1.0, i, Vecteur(0.0, 0.0, 0.0), type);
@@ -30,7 +30,7 @@ int main() {
     }
     //Red square
     for (int i = 0; i < 40; i++){
-        for ( int j = 0; j < 40; j ++) {
+        for ( int j = 0; j < 1; j ++) {
             string type = "nil";
             Particle *particleToInsert = new Particle(Vecteur(60 + i , pow(2, 1/6)/sigma + 40 + j, 0.0),
                                                       Vecteur(0.0, 0.0, 0.0), 1.0, i, Vecteur(0.0, 0.0, 0.0), type);
@@ -42,12 +42,15 @@ int main() {
     Universe *univ = new Universe(particleList, 2, rCut, lD);
 
     ofstream outputFile;
+    ofstream simulationFile;
     outputFile.open("../../test_application.txt");
+    simulationFile.open("../../sim.txt");
      for (auto &particle: particleList){
          outputFile << particle->getPosition() << endl;
      }
-    stromerVerletPotential(*univ, 19.5, d_t, outputFile);
+    stromerVerletPotential(*univ, 19.5, d_t, simulationFile);
     outputFile.close();
+    simulationFile.close();
 
     return 0;
 };

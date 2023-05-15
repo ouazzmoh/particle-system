@@ -16,7 +16,7 @@ public:
 
 
         double norm() const{
-                return sqrt(pow(2, x) + pow(2, y) + pow(2, z));
+                return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
         };
         /**
          * Returns the distance to another point in polar cordinates ("this" is the reference)

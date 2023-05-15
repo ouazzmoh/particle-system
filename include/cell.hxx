@@ -20,9 +20,7 @@ public :
 
         const vector<Particle *> &getParticles() const;
 
-        void removeParticle(Particle * particle){
-            particles.erase(std::remove(particles.begin(), particles.end(), particle), particles.end());
-        }
+        void removeParticle(Particle * particle);
 };
 
 #endif
