@@ -36,7 +36,7 @@ int main() {
         //TODO: Make the desired output-> only x and y + each iteration at a line
 
         ofstream outputFile;
-        outputFile.open("../coords.txt");
+        outputFile.open("../../coords.txt");
         stromerVerlet(gravitationalSystem, 468.5, 0.015, outputFile);
         outputFile.close();
 

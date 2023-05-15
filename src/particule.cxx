@@ -135,8 +135,8 @@ void stromerVerlet(vector<Particle*> &particleList, double tEnd, double deltaT,
                 t += deltaT;
                 int index = 0;
                 for (auto &particleI: particleList) {
-                        particleI->getPosition() =
-                                particleI->getPosition() + ( particleI->vitesse +
+                        particleI->position =
+                                particleI->position + ( particleI->vitesse +
                                 particleI->force * (0.5 / particleI->masse) * deltaT) * deltaT;
                         fOld[index] = particleI->force;
                         index++;
@@ -149,7 +149,7 @@ void stromerVerlet(vector<Particle*> &particleList, double tEnd, double deltaT,
                         index++;
                 }
                 for (auto &particleI: particleList) {
-                        outputStream << particleI->getPosition() << endl;
+                        outputStream << particleI->position << endl;
                 }
         }
 }

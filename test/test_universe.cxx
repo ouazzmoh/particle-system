@@ -26,7 +26,8 @@ vector<Particle *> constructUniverse(double k){
     for (int i = 0; i < pow(pow(2.0,k), 3.0); ++i){
         string type = "(nil)";
         //Using auto deduces automatically the type
-        Particle * particleToInsert = new Particle(Vecteur(dist(mt), dist(mt), dist(mt)), Vecteur(7.0, 7.0, 7.0)
+        Particle * particleToInsert = new Particle(Vecteur(dist(mt), dist(mt), dist(mt)),
+                                                   Vecteur(7.0, 7.0, 7.0)
                 , 1.0, i, Vecteur(0.0, 0.0, 0.0), type);
         particleList.push_back(particleToInsert);
     }

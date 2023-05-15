@@ -49,7 +49,8 @@ int main() {
     Universe *univ2 = new Universe(particles2, dim, 0.3, lD);
 
     ofstream outputFile;
-    outputFile.open("../test_universe_algo.txt");
+    outputFile.open("../../test_universe_algo.txt");
+
     stromerVerlet_potentiel(*univ2, 468.5, 0.015, outputFile);
     outputFile.close();
 

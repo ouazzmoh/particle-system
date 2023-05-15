@@ -42,21 +42,12 @@ int main() {
     Universe *univ = new Universe(particleList, 2, rCut, lD);
 
     ofstream outputFile;
-    outputFile.open("../test_application.txt");
-    // for (auto &particle: particleList){
-    //     outputFile << particle->getPosition() << endl;
-    // }
-   stromerVerlet_potentiel(*univ, 19.5, d_t, outputFile);
+    outputFile.open("../../test_application.txt");
+     for (auto &particle: particleList){
+         outputFile << particle->getPosition() << endl;
+     }
+    stromerVerlet_potentiel(*univ, 19.5, d_t, outputFile);
     outputFile.close();
-
-
-
-
-
-
-
-
-
 
     return 0;
 };

@@ -52,5 +52,7 @@ int main() {
  * Les résultats des listes sont meilleurs, car ce sont des listes doublement chainées avec un cout d'insertion o(1)
  * contrairement au set qui son des BST, donc cout d'inserion est de cout o(log(n))
  * Dans la suite nous travaillerons avec la structure list
+ *
+ * Nous utiliserons les vecteurs car pour des particules de grandes tailles, il nous donne de bonnes resultats
  */
 }
