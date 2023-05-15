@@ -268,6 +268,14 @@ vector<long> Particle::calculateGridIndex(double rCut){
         return result;
 }
 
+bool Particle::isCellPositionChanged() const {
+    return cellPositionChanged;
+}
+
+void Particle::setCellPositionChanged(bool cellPositionChanged) {
+    Particle::cellPositionChanged = cellPositionChanged;
+}
+
 
 void printParticleList(const vector<Particle *> &particleList){
     for (auto  &particle : particleList){

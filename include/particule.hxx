@@ -21,13 +21,18 @@ private:
         Vecteur position;
         Vecteur vitesse;
         double  masse;
+public:
+        bool isCellPositionChanged() const;
+
+private:
         int identifiant;
         Vecteur force;
         string type;
+        bool cellPositionChanged;
 public:
         Particle(Vecteur position, Vecteur vitesse, double masse, int identifiant, Vecteur force, string type):
         position(position), vitesse(vitesse),
-         masse(masse), identifiant(identifiant), force(force), type(type){}
+         masse(masse), identifiant(identifiant), force(force), type(type), cellPositionChanged(false){}
 
 
         Vecteur getPosition() const;
@@ -64,6 +69,13 @@ public:
         friend void calculate_interaction_forces_potentiel(Universe universe);
         friend void stromerVerlet_potentiel(Universe universe, double tEnd, double deltaT,
                                         ofstream &outputStream);
+        friend void interactionForcesPotentiel(Universe & universe);
+
+        friend void stromerVerletPotential(Universe & universe, double tEnd, double deltaT, ofstream &outputStream);
+
+        void setCellPositionChanged(bool cellPositionChanged);
+
+        friend class Universe;
 
 };
 

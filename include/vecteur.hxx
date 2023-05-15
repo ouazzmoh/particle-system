@@ -11,6 +11,7 @@ using namespace std;
 class Vecteur {
         double x, y, z;
 public:
+
         Vecteur(double x = 0.0, double y = 0.0, double z = 0.0):x(x), y(y), z(z){}
 
 

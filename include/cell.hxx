@@ -8,18 +8,21 @@
 class Cell {
 private :
         vector<Particle *> particles;
-        vector<Cell*> neighborCells;
-        vector<long> position; //Position in the cells grid, pointer to array
 public :
-        Cell(vector<Particle *> &particles, vector<long> position): particles(particles), position(position){
-                neighborCells.push_back(this);//The neighborCells contains the cell itself
-        }
-        vector<long> getPosition(){return position;}
-        void setPosition(vector<long> position){this->position = position;}
 
-        void addNeighborCell(Cell * cell){
-                neighborCells.push_back(cell);
-        };
+        //Default constructor, useful to create the grid and initializes to empty vector
+        Cell() : particles({}) {}
+
+        Cell(vector<Particle *> &particles): particles(particles){}
+
+        friend class Universe;
+        friend void updateGrid(Universe &universe);
+
+        const vector<Particle *> &getParticles() const;
+
+        void removeParticle(Particle * particle){
+            particles.erase(std::remove(particles.begin(), particles.end(), particle), particles.end());
+        }
 };
 
 #endif

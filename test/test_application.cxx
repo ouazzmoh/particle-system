@@ -46,7 +46,7 @@ int main() {
      for (auto &particle: particleList){
          outputFile << particle->getPosition() << endl;
      }
-    stromerVerlet_potentiel(*univ, 19.5, d_t, outputFile);
+    stromerVerletPotential(*univ, 19.5, d_t, outputFile);
     outputFile.close();
 
     return 0;
