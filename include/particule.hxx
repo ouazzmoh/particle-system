@@ -66,9 +66,10 @@ public:
         friend void calculateForces(vector<Particle*> &particleList);
         friend void calculateForcesSlow(vector<Particle*> &particleList);
         friend ostream& operator<<(ostream &o, const Particle &);
+        friend void printVtk(vector<Particle *> particleList, ostream & outputStream);
 
         friend void interactionForcesPotentiel(Universe & universe);
-        friend void stromerVerletPotential(Universe & universe, double tEnd, double deltaT, ofstream &outputStream);
+        friend void stromerVerletPotential(Universe & universe, double tEnd, double deltaT, ofstream &outputStream, string path);
 
         void setCellPositionChanged(bool cellPositionChanged);
 
@@ -104,10 +105,5 @@ set<Particle> constructParticleSet(int n, bool print);
 vector<Particle> constructParticleVector(int n, bool print);
 
 deque<Particle> constructParticleDeque(int n, bool print);
-
-void printParticleList(const vector<Particle *> &particleList);
-
-
-vector<int> calculateGridIndex(double xMax, double yMax, double zMax, vector<double> nCD);
 
 #endif

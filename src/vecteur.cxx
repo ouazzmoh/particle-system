@@ -10,7 +10,7 @@ bool Vecteur::operator==(const Vecteur &v2){
 }
 
 ostream& operator<<(ostream& o, const Vecteur &v){
-        return o << v.x << "    " << v.y << "    " << v.z;
+        return o << v.x << " " << v.y << " " << v.z;
 }
 
 

@@ -43,12 +43,12 @@ int main() {
 
     ofstream outputFile;
     ofstream simulationFile;
-    outputFile.open("../../test_application.txt");
-    simulationFile.open("../../sim.txt");
-     for (auto &particle: particleList){
-         outputFile << particle->getPosition() << endl;
-     }
-    stromerVerletPotential(*univ, 19.5, d_t, simulationFile);
+    outputFile.open("../../demo/init.vtu");
+    simulationFile.open("../../demo/end.vtu");
+
+    printVtk(univ->getParticles(), outputFile);
+
+    stromerVerletPotential(*univ, 19.5, d_t, simulationFile, "../../demo/");
     outputFile.close();
     simulationFile.close();
 

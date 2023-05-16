@@ -30,18 +30,20 @@ public:
         friend ostream& operator<<(ostream &o, const Universe &);
 
         friend void interactionForcesPotentiel(Universe & universe);
-        friend void stromerVerletPotential(Universe & universe, double tEnd, double deltaT, ofstream &outputStream);
+        friend void stromerVerletPotential(Universe & universe, double tEnd, double deltaT, ofstream &outputStream, string path);
         friend void updateGrid(Universe & universe);
 
         void calculateForcesUni();
         void calculateForcesSlowUni();
+
+        const vector<Particle *> &getParticles() const;
 };
 
 
 
 ostream& operator<<(ostream & o, const Universe & u);
 
-
+void printVtk(vector<Particle *> particleList, ostream & outputStream);
 
 
 

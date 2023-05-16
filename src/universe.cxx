@@ -77,11 +77,6 @@ void interactionForcesPotentiel(Universe & universe)
                                     if (rIJ < universe.rCut && rIJ > 0){
                                         double fIJMagnitude = 24 * universe.epsilon * (1/(rIJ*rIJ)) *
                                             pow((universe.sigma /rIJ), 6) * (1- 2 * pow((universe.sigma/rIJ), 6));
-                                        //TODO: Remove this
-                                        if (fIJMagnitude != 0) {
-                                            cout << fIJMagnitude << endl;
-                                        }
-
                                         particleI->force = particleI->force + rIJVect * fIJMagnitude;
                                     }
                                 }
@@ -123,6 +118,41 @@ void updateGrid(Universe &universe)
     }
 }
 
+
+void printVtk(vector<Particle *> particleList, ostream & outputStream){
+    outputStream << "<VTKFile type=\"UnstructuredGrid\" version=\"0.1\" byte_order=\"BigEndian\">\n"
+                    "  <UnstructuredGrid>\n"
+                    "    <Piece NumberOfPoints=\""<< particleList.size()<< "\" NumberOfCells=\"0\">" << endl;
+    outputStream << "<Points>\n"
+                    "        <DataArray name=\"Position\" type=\"Float32\" NumberOfComponents=\"3\" format=\"ascii\">"<<endl;
+    for (auto particle : particleList) outputStream << particle->position << " ";
+
+    outputStream << "\n        </DataArray>\n"
+                    "      </Points>" << endl;
+
+    outputStream << "<PointData Vectors=\"vector\">\n"
+                    "        <DataArray type=\"Float32\" Name=\"Velocity\" NumberOfComponents=\"3\" format=\"ascii\">\n";
+    for (auto particle : particleList) outputStream << particle->vitesse << " ";
+    outputStream << "        </DataArray>\n"
+                    "        <DataArray type=\"Float32\" Name=\"Masse\" format=\"ascii\">\n";
+    for (auto particle : particleList) outputStream << particle->masse << " ";
+    outputStream  <<"\n        </DataArray>\n"
+                    "      </PointData>\n"
+                    "      <Cells>\n"
+                    "        <DataArray type=\"Int32\" Name=\"connectivity\" format=\"ascii\">\n"
+                    "        </DataArray>\n"
+                    "        <DataArray type=\"Int32\" Name=\"offsets\" format=\"ascii\">\n"
+                    "        </DataArray>\n"
+                    "        <DataArray type=\"UInt8\" Name=\"types\" format=\"ascii\">\n"
+                    "        </DataArray>\n"
+                    "      </Cells>\n"
+                    "    </Piece>\n"
+                    "  </UnstructuredGrid>\n"
+                    "</VTKFile>" << endl;
+}
+
+
+
 /**
  * Uses Stromer Verlet integration scheme to simulate the movement of particles with potential force
  * @param universe
@@ -131,7 +161,7 @@ void updateGrid(Universe &universe)
  * @param outputStream
  */
 void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
-                            ofstream &outputStream)
+                            ofstream &outputStream, string path)
 {
     // Calculate the initial forces
     vector<Particle *> particleList = universe.particles;
@@ -171,11 +201,18 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
                                                       deltaT * (0.5 / particleI->masse);
             index++;
         }
-        for (auto particleI : particleList)
-        {
-            outputStream << particleI->position << endl;
-        }
+
+        ofstream os;
+        os.open(path + "sim1." + to_string(t) + ".vtk");
+        printVtk(particleList, os);
+        os.close();
+//        for (auto particleI : particleList)
+//        {
+//            outputStream << particleI->position << endl;
+//        }
     }
+
+
 }
 
 void Universe::calculateForcesUni()
@@ -186,6 +223,10 @@ void Universe::calculateForcesUni()
 void Universe::calculateForcesSlowUni()
 {
     calculateForcesSlow(particles);
+}
+
+const vector<Particle *> &Universe::getParticles() const {
+    return particles;
 }
 
 
