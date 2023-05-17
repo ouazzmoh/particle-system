@@ -172,9 +172,14 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
         fOld.push_back(particleI->force);
     }
 
+
+
     double t = 0.0;
+    int iter = 0;
+
     while (t < tEnd)
     {
+        iter ++;
         t += deltaT;
         int index = 0;
 
@@ -202,10 +207,7 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
             index++;
         }
 
-        ofstream os;
-        os.open(path + "sim1." + to_string(t) + ".vtk");
-        printVtk(particleList, os);
-        os.close();
+
 //        for (auto particleI : particleList)
 //        {
 //            outputStream << particleI->position << endl;

@@ -34,7 +34,7 @@ Universe * constructUniverse(double k){
     cout << "Time taken for the insertion with size = 2**(3 * " << k << ") ----> "
          << chrono::duration<double, milli>(exec_time).count() << "ms" << endl;
 
-    return new Universe(particleList, 0, 0, 0);
+    return new Universe(particleList, 0, 0, 0, 0, 0);
 }
 
 
