@@ -35,7 +35,6 @@ vector<Particle *> constructUniverse(double k){
 
 
 int main() {
-    cout << "toto" << endl;
 
     //TP3-Question7: test insertion en utilisant les listes
 
