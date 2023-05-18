@@ -36,6 +36,7 @@ sigma(sigma), boundCond(boundCond)
         int x_cell = (int)(particle->getPosition().getX() / rCut);
         int y_cell = (int)(particle->getPosition().getY() / rCut);
         int z_cell = (int)(particle->getPosition().getZ() / rCut);
+        assert(x_cell < nCD[0] && y_cell < nCD[1]);
         grid[x_cell][y_cell].particles.push_back(particle);//2D
     }
 };
@@ -161,7 +162,7 @@ void printVtk(vector<Particle *> particleList, ostream & outputStream){
  * @param outputStream
  */
 void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
-                            ofstream &outputStream, string path)
+                            bool visual,  string path)
 {
     // Calculate the initial forces
     vector<Particle *> particleList = universe.particles;
@@ -175,8 +176,23 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
     double t = 0.0;
     int iter = 0;
 
+    int fps = 30;
+    int totalFrames = round(tEnd * fps);
+    int visStepsPerFrame = round(1.0 / (fps * deltaT));
+    int frameCounter = 0;
+
     while (t < tEnd)
     {
+        //
+        if (visual && iter % visStepsPerFrame == 0){
+            ofstream os;
+            os.open(path + "sim" + to_string(frameCounter) + ".vtu");
+            printVtk(universe.particles, os);
+            os.close();
+            frameCounter++;
+        }
+
+
         iter ++;
         t += deltaT;
         int index = 0;
@@ -209,21 +225,21 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
                 if (newX >= universe.lD[0]){
                     newX = fmod(newX, universe.lD[0]);
                 }
-                else if (newX <= 0){
+                else if (newX < 0){
                     newX = 100 - abs(fmod(newX, universe.lD[0]));
                 }
                 
                 if (newY >= universe.lD[1]){
                     newY = fmod(newY, universe.lD[1]);
                 }
-                else if (newY <= 1){
+                else if (newY < 0){
                     newY = 100 - abs(fmod(newY, universe.lD[1]));
                 }
 
                 if (newZ >= universe.lD[2]){
                     newZ = fmod(newZ, universe.lD[2]);
                 }
-                else if (newZ <= 2){
+                else if (newZ < 0){
                     newZ = 100 - abs(fmod(newZ, universe.lD[2]));
                 }
                 particleI->position = Vecteur(newX, newY, newZ);

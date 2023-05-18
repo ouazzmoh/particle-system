@@ -71,7 +71,7 @@ public:
         friend void printVtk(vector<Particle *> particleList, ostream & outputStream);
 
         friend void interactionForcesPotentiel(Universe & universe);
-        friend void stromerVerletPotential(Universe & universe, double tEnd, double deltaT, ofstream &outputStream, string path);
+        friend void stromerVerletPotential(Universe & universe, double tEnd, double deltaT,bool visual,  string path);
 
         void setCellPositionChanged(bool cellPositionChanged);
 
