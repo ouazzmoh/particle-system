@@ -63,13 +63,56 @@ ostream &operator<<(std::ostream &os, const Universe &universe)
  * Calculates the potential interaction forces between a particle and its neighboring particles
  * @param universe
  */
-void interactionForcesPotentiel(Universe & universe)
+void interactionForcesPotentiel(Universe & universe, bool ljReflexion)
 {
     for (int x = 0; x < universe.nCD[0]; x++){
         for (int y = 0; y < universe.nCD[1]; y++){
             //We are in the cell (x,y)
             //We loop over the neighboring cells, if they exist we consider the particles inside
             for (auto particleI : universe.grid[x][y].getParticles()){
+                particleI->force = Vecteur(0.0, 0.0, 0.0);
+                if (ljReflexion) {
+                    //Detecting the closest boundary and choosing the direction
+                    int dirX;double rX;
+                    if (particleI->position.getX() < universe.lD[0] - particleI->position.getX()){
+                        //Left boundary the velocity is negative, the magnitude should then be positive
+                        rX = particleI->position.getX();
+                        dirX = 1;
+                    }
+                    else {
+                        rX = universe.lD[0] - particleI->position.getX();
+                        dirX  = - 1;
+                    }
+
+                    int dirY;double rY;
+                    if (particleI->position.getY() < universe.lD[1] - particleI->position.getY()){
+                        //Left boundary the velocity is negative, the magnitude should then be positive
+                        rY = particleI->position.getY();
+                        dirY = 1;
+                    }
+                    else {
+                        rY = universe.lD[1] - particleI->position.getY();
+                        dirY  = - 1;
+                    }
+                    double rZ = 0; //TODO : Third dimension
+                    
+
+                    double rCutRef = pow(2, 1.0 / 6.0) * universe.sigma;
+                    if (rX < rCutRef && rX != 0){
+                        //The direction depends on the speed direction, it is the opposite
+                        double flJMagnitude = -24 * universe.epsilon  * (1/(2*rX)) * pow(universe.sigma / (2*rX), 6) *
+                            (1 - 2 * pow(universe.sigma / (2*rX), 6));
+                        particleI->force.setX(particleI->force.getX() + dirX * flJMagnitude);
+                    }
+
+                    else if (rY < rCutRef && rY != 0){
+                        double flJMagnitude = -24 * universe.epsilon  * (1/(2*rY)) * pow(universe.sigma / (2*rY), 6) *
+                                              (1 - 2 * pow(universe.sigma / (2*rY), 6));
+                        particleI->force.setY(particleI->force.getY() + dirY * flJMagnitude);
+                    }
+                    //TODO: Add for Z
+                }
+                //Interactions between particles
                 for (int dx = -1; dx <= 1; dx ++){
                     for (int dy = -1; dy <= 1; dy++){
                         if (x + dx < universe.nCD[0] && x + dx >= 0 && y + dy < universe.nCD[1] && y + dy >= 0){
@@ -162,12 +205,16 @@ void printVtk(vector<Particle *> particleList, ostream & outputStream){
  * @param outputStream
  */
 void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
-                            bool visual,  string path)
+                            bool visual, string path, bool ljReflexion)
 {
+    if (ljReflexion){
+        assert(universe.boundCond != -1);
+    }
+
     // Calculate the initial forces
     vector<Particle *> particleList = universe.particles;
     vector<Vecteur> fOld;
-    interactionForcesPotentiel(universe);
+    interactionForcesPotentiel(universe, ljReflexion);
     for (auto particleI : particleList)
     {
         fOld.push_back(particleI->force);
@@ -177,7 +224,6 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
     int iter = 0;
 
     int fps = 30;
-    int totalFrames = round(tEnd * fps);
     int visStepsPerFrame = round(1.0 / (fps * deltaT));
     int frameCounter = 0;
 
@@ -251,7 +297,7 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
             }
         }
 
-        interactionForcesPotentiel(universe);
+        interactionForcesPotentiel(universe, ljReflexion);
 
         index = 0; // will be reused after this
         for (auto particleI : particleList)
