@@ -8,7 +8,6 @@ add_executable(test_universe_algo test_universe_algo.cxx)
 add_executable(test_universe_tp3 test_universe_tp3.cxx)
 add_executable(test_application test_application.cxx)
 add_executable(test_small test_small.cxx)
-add_executable(test_one test_one.cxx)
 
 # Fait le lien avec la bibliothèque créée précedemment
 # Les entêtes sont automatiquement détectés.
@@ -57,8 +56,3 @@ target_link_libraries(test_small particules)
 target_link_libraries(test_small vecteur)
 target_link_libraries(test_small universe)
 target_link_libraries(test_small cell)
-
-target_link_libraries(test_one particules)
-target_link_libraries(test_one vecteur)
-target_link_libraries(test_one universe)
-target_link_libraries(test_one cell)
