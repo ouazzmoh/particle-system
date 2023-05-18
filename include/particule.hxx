@@ -21,6 +21,9 @@ private:
         Vecteur vitesse;
         double  masse;
 public:
+        void setPosition(const Vecteur &position);
+
+public:
         bool isCellPositionChanged() const;
 
 private:

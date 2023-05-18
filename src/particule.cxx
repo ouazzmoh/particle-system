@@ -275,6 +275,10 @@ void Particle::setCellPositionChanged(bool cellPositionChanged) {
     Particle::cellPositionChanged = cellPositionChanged;
 }
 
+void Particle::setPosition(const Vecteur &position) {
+    Particle::position = Vecteur(2*100 - position.getX(), 2*100 - position.getY(), position.getZ());
+}
+
 
 void printParticleList(const vector<Particle *> &particleList){
     for (auto  &particle : particleList){
