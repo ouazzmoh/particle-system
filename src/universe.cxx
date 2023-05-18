@@ -2,11 +2,13 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include <cmath>
 
 #include "universe.hxx"
 #include "cell.hxx"
 
-Universe::Universe(std::vector<Particle *> &particles, int dim, double rCut, double *lD, double epsilon, double sigma) : particles(particles), rCut(rCut), epsilon(epsilon), sigma(sigma)
+Universe::Universe(std::vector<Particle *> &particles, int dim, double rCut, double *lD, double epsilon, double sigma, int boundCond) : particles(particles), rCut(rCut), epsilon(epsilon),
+sigma(sigma), boundCond(boundCond)
 {
     // Organize the particles in cells
     this->dim = dim;
@@ -34,6 +36,7 @@ Universe::Universe(std::vector<Particle *> &particles, int dim, double rCut, dou
         int x_cell = (int)(particle->getPosition().getX() / rCut);
         int y_cell = (int)(particle->getPosition().getY() / rCut);
         int z_cell = (int)(particle->getPosition().getZ() / rCut);
+        assert(x_cell < nCD[0] && y_cell < nCD[1]);
         grid[x_cell][y_cell].particles.push_back(particle);//2D
     }
 };
@@ -93,8 +96,6 @@ void interactionForcesPotentiel(Universe & universe)
 /**
  * Called after change of position of particles, it removes a particle from the old cell and puts it in the new cell
  * @param universe
- * @param particleI
- * @param ancien_position
  */
 void updateGrid(Universe &universe)
 {
@@ -161,7 +162,7 @@ void printVtk(vector<Particle *> particleList, ostream & outputStream){
  * @param outputStream
  */
 void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
-                            ofstream &outputStream, string path)
+                            bool visual,  string path)
 {
     // Calculate the initial forces
     vector<Particle *> particleList = universe.particles;
@@ -172,29 +173,82 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
         fOld.push_back(particleI->force);
     }
 
-
-
     double t = 0.0;
     int iter = 0;
 
+    int fps = 30;
+    int totalFrames = round(tEnd * fps);
+    int visStepsPerFrame = round(1.0 / (fps * deltaT));
+    int frameCounter = 0;
+
     while (t < tEnd)
     {
+        //
+        if (visual && iter % visStepsPerFrame == 0){
+            ofstream os;
+            os.open(path + "sim" + to_string(frameCounter) + ".vtu");
+            printVtk(universe.particles, os);
+            os.close();
+            frameCounter++;
+        }
+
+
         iter ++;
         t += deltaT;
         int index = 0;
+        if (universe.boundCond == 0 || universe.boundCond == -1) {
+            //absorption
+            for (auto particleI: particleList) {
+                particleI->position =
+                    particleI->position + (particleI->vitesse +
+                                           particleI->force * (0.5 / particleI->masse) * deltaT) *
+                                          deltaT;
+                //The position is changed -> declare the change
+                particleI->setCellPositionChanged(true);
+                updateGrid(universe);
+                fOld[index] = particleI->force;
+                index++;
+            }
+        }
+        else if (universe.boundCond == 1) {
+            //periodic
+            for (auto particleI: particleList) {
+                //portal_x = new_x % x_end
+                particleI->position =
+                    (particleI->position + (particleI->vitesse +
+                                            particleI->force * (0.5 / particleI->masse) * deltaT) *
+                                           deltaT);
+                
+                double newX = particleI->position.getX();
+                double newY = particleI->position.getY();
+                double newZ = particleI->position.getZ();
+                if (newX >= universe.lD[0]){
+                    newX = fmod(newX, universe.lD[0]);
+                }
+                else if (newX < 0){
+                    newX = 100 - abs(fmod(newX, universe.lD[0]));
+                }
+                
+                if (newY >= universe.lD[1]){
+                    newY = fmod(newY, universe.lD[1]);
+                }
+                else if (newY < 0){
+                    newY = 100 - abs(fmod(newY, universe.lD[1]));
+                }
 
-        for (auto particleI : particleList)
-        {
-            particleI->position =
-                particleI->position + (particleI->vitesse +
-                                       particleI->force * (0.5 / particleI->masse) * deltaT) *
-                                      deltaT;
-            //The position is changed -> declare the change
-            particleI->setCellPositionChanged(true);
-            updateGrid(universe);
-
-            fOld[index] = particleI->force;
-            index++;
+                if (newZ >= universe.lD[2]){
+                    newZ = fmod(newZ, universe.lD[2]);
+                }
+                else if (newZ < 0){
+                    newZ = 100 - abs(fmod(newZ, universe.lD[2]));
+                }
+                particleI->position = Vecteur(newX, newY, newZ);
+                //The position is changed -> declare the change
+                particleI->setCellPositionChanged(true);
+                updateGrid(universe);
+                fOld[index] = particleI->force;
+                index++;
+            }
         }
 
         interactionForcesPotentiel(universe);
@@ -204,14 +258,23 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
         {
             particleI->vitesse = particleI->vitesse + (particleI->force + fOld[index]) *
                                                       deltaT * (0.5 / particleI->masse);
+            if (universe.boundCond == -1){
+                //Reflexion
+                if (particleI->position.getX() >= universe.lD[0] || particleI->position.getX() <= 0){
+                    particleI->vitesse.setX( -particleI->vitesse.getX());
+                }
+                if (particleI->position.getY() >= universe.lD[1] || particleI->position.getY() <= 1){
+                    particleI->vitesse.setY( -particleI->vitesse.getY());
+                }
+                if (particleI->position.getZ() >= universe.lD[2] || particleI->position.getZ() <= 2){
+                    particleI->vitesse.setZ( -particleI->vitesse.getZ());
+                }
+            }
+            
             index++;
         }
 
 
-//        for (auto particleI : particleList)
-//        {
-//            outputStream << particleI->position << endl;
-//        }
     }
 
 

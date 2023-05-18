@@ -7,6 +7,7 @@ add_executable(test_potentiel test_potentiel.cxx)
 add_executable(test_universe_algo test_universe_algo.cxx)
 add_executable(test_universe_tp3 test_universe_tp3.cxx)
 add_executable(test_application test_application.cxx)
+add_executable(test_boundaries test_boundaries.cxx)
 
 # Fait le lien avec la bibliothèque créée précedemment
 # Les entêtes sont automatiquement détectés.
@@ -50,3 +51,8 @@ target_link_libraries(test_application particules)
 target_link_libraries(test_application vecteur)
 target_link_libraries(test_application universe)
 target_link_libraries(test_application cell)
+
+target_link_libraries(test_boundaries particules)
+target_link_libraries(test_boundaries vecteur)
+target_link_libraries(test_boundaries universe)
+target_link_libraries(test_boundaries cell)

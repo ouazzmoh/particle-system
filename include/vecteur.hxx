@@ -45,6 +45,7 @@ public:
         Vecteur& operator*=(const Vecteur &v2);
         Vecteur operator-(const Vecteur &v2);
         Vecteur& operator-=(const Vecteur &v2);
+        Vecteur& operator%(const Vecteur &v2);
 
         Vecteur operator*(double f);
         Vecteur& operator*=(double f);
@@ -58,6 +59,12 @@ public:
         double getY() const;
 
         double getZ() const;
+
+        void setX(double x);
+
+        void setY(double y);
+
+        void setZ(double z);
 
 
 };
