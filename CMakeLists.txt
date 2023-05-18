@@ -23,5 +23,10 @@ add_subdirectory(src)
 ## On créée les tests pour la bibliothèque.
 ## Ces tests sont unitaires ou fonctionnels
 add_subdirectory(test)
+# Autres déclarations et configurations
 
-## On implémente une démo, un programme de vérification.
+add_subdirectory(nv_tests)
+
+
+
+
