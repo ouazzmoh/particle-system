@@ -61,7 +61,6 @@ protected:
 
 // test the initialization of the grid
 TEST_F(SetUpForAllTests, HandlesGridInitialPosition) {
-    cout << univ << endl;
 
     vector<Particle*> particlesIndex_zero_zero = univ->getGrid()[0][0].getParticles();
     bool b  = checkParticleInCell(particleToInsert, particlesIndex_zero_zero);
@@ -83,10 +82,20 @@ TEST_F(SetUpForAllTests, HandlesGridInitialPosition) {
 }
 
 
+
+
+
+// test the changment of position
+TEST_F(SetUpForAllTests, HandlesChangingPosition) {
+    vector<Particle*> particlesIndex_zero_zero = univ->getGrid()[0][0].getParticles();
+    particleToInsert->setPosition(Vecteur(11,15,14));
+    ADD_FAILURE() << "universe fin : \n" << *univ ;
+}
+
 // check the universe after the application of stromerVerletPotential function
 TEST_F(SetUpForAllTests, HandlesStormerVerlet) {
     ADD_FAILURE() << "universe debut : \n" << *univ ;
-    stromerVerletPotential(*univ, 40,0.005, false, "");
+    stromerVerletPotential(*univ, 40,0.5, false, "");
     ADD_FAILURE() << "universe fin : \n" << *univ ;
     EXPECT_TRUE(true);
 }
