@@ -86,11 +86,9 @@ TEST_F(SetUpForAllTests, HandlesGridInitialPosition) {
 // check the universe after the application of stromerVerletPotential function
 TEST_F(SetUpForAllTests, HandlesStormerVerlet) {
     ADD_FAILURE() << "This is a commentary\n" << *univ ;
-    stromerVerletPotential(*univ, 4,0.005, false, "");
+    stromerVerletPotential(*univ, 40,0.005, false, "");
     ADD_FAILURE() << "This is a commentary 2 \n" << *univ ;
-
     EXPECT_TRUE(true);
-
 }
 
 
