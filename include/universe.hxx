@@ -26,13 +26,26 @@ private :
         int boundCond = 0; //boundary condition, 0:absorption/ 1:periodic (portal) / -1:reflection
         //TODO: Use templates to define these
 public:
+
+        /**
+         * Constructor for the universe
+         * @param particles
+         * @param dim
+         * @param rCut
+         * @param LD
+         * @param epsilon
+         * @param sigma
+         * @param boundCond : by default the property of the universe is absorption
+         */
         Universe(std::vector<Particle*>& particles, int dim, double rCut, double* LD, double epsilon, double sigma, int boundCond =0);
         std::vector<std::vector<Cell>> getGrid();
         friend ostream& operator<<(ostream &o, const Universe &);
 
-        friend void interactionForcesPotentiel(Universe & universe);
-        friend void stromerVerletPotential(Universe & universe, double tEnd, double deltaT,bool visual, string path);
-        friend void updateGrid(Universe & universe);
+
+        friend void interactionForcesPotentiel(Universe & universe, bool ljReflexion, double G);
+        friend void stromerVerletPotential(Universe & universe, double tEnd, double deltaT,bool visual, string path,
+                                           bool ljReflexion, double G, double eCD);
+        friend void updateGrid(Universe & universe, Particle *);
         void calculateForcesUni();
         void calculateForcesSlowUni();
 
@@ -44,7 +57,9 @@ public:
 ostream& operator<<(ostream & o, const Universe & u);
 
 void printVtk(vector<Particle *> particleList, ostream & outputStream);
-void stromerVerletPotential(Universe & universe, double tEnd, double deltaT, bool visual,  string path);
+void stromerVerletPotential(Universe & universe, double tEnd, double deltaT, bool visual,  string path,
+                            bool ljReflexion, double G, double eCD);
+
 
 
 #endif

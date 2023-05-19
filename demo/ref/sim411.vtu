@@ -3,12 +3,12 @@
     <Piece NumberOfPoints="4" NumberOfCells="0">
 <Points>
         <DataArray name="Position" type="Float32" NumberOfComponents="3" format="ascii">
-78.075 9.54 0 68.075 9.54 0 58.075 9.54 0 48.075 9.54 0 
+44.7576 7.54 0 60.639 7.54 0 63.8704 7.54 0 79.8304 7.54 0 
         </DataArray>
       </Points>
 <PointData Vectors="vector">
         <DataArray type="Float32" Name="Velocity" NumberOfComponents="3" format="ascii">
--5 4 -0 -5 4 -0 -5 4 -0 -5 4 -0         </DataArray>
+-6.30155 4 -0 -3.52475 4 -0 -6.47148 4 -0 -3.68236 4 -0         </DataArray>
         <DataArray type="Float32" Name="Masse" format="ascii">
 1 1 1 1 
         </DataArray>

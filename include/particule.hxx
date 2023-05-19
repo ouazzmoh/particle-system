@@ -18,24 +18,20 @@ using namespace std;
 class Particle {
 private:
         Vecteur position;
+        vector<int> gridPosition;
         Vecteur vitesse;
         double  masse;
-public:
-        void setPosition(const Vecteur &position);
-
-public:
-        bool isCellPositionChanged() const;
 
 private:
         int identifiant;
         Vecteur force;
         string type;
-        bool cellPositionChanged;
 public:
         Particle(){};
         Particle(Vecteur position, Vecteur vitesse, double masse, int identifiant, Vecteur force, string type):
         position(position), vitesse(vitesse),
-         masse(masse), identifiant(identifiant), force(force), type(type), cellPositionChanged(false){}
+         masse(masse), identifiant(identifiant), force(force), type(type){
+        }
 
 
         Vecteur getPosition() const;
@@ -53,15 +49,7 @@ public:
          */
         double interactionLJ(Particle *p,double epsilon, double sigma);
 
-        /**
-         * Calculate the index of the particle in the grid
-         * @param xMax
-         * @param yMax
-         * @param zMax
-         * @param nCD
-         * @return
-         */
-        vector<long> calculateGridIndex(double rCut);
+
 
 
         /**friends**/
@@ -71,13 +59,18 @@ public:
         friend ostream& operator<<(ostream &o, const Particle &);
         friend void printVtk(vector<Particle *> particleList, ostream & outputStream);
 
-        friend void interactionForcesPotentiel(Universe & universe);
-        friend void stromerVerletPotential(Universe & universe, double tEnd, double deltaT,bool visual,  string path);
+        friend void interactionForcesPotentiel(Universe & universe, bool ljRelexion, double G);
+        friend void stromerVerletPotential(Universe & universe, double tEnd, double deltaT,bool visual,  string path,
+                                           bool ljReflexion, double G, double eCD);
+
+        friend double kineticEnergy(Universe &universe);
+        friend void updateGrid(Universe &universe, Particle * particle);
 
         void setCellPositionChanged(bool cellPositionChanged);
 
         friend class Universe;
 
+        void setPosition(const Vecteur &position);
 };
 
 
@@ -89,7 +82,7 @@ public:
  * @param deltaT
  * @param outputStream
  */
-void stromerVerlet(vector<Particle*> &particleList, double tEnd, double deltaT, ofstream &outputStream);
+void stromerVerlet(vector<Particle*> &particleList, double tEnd, double deltaT, ofstream &outputStream, bool ljReflexion);
 
 
 
@@ -99,6 +92,10 @@ void stromerVerlet(vector<Particle*> &particleList, double tEnd, double deltaT, 
  * @param particleList : reference to a vector of pointers to particle instances
  */
 void calculateForces(vector<Particle *> &particleList);
+
+
+
+
 
 
 list<Particle> constructParticleList(int n, bool print);

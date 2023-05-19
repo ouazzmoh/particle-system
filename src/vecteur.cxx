@@ -98,3 +98,21 @@ void Vecteur::setZ(double z) {
     Vecteur::z = z;
 }
 
+/**
+ * Faster function to calculate power of integers
+ * @param base
+ * @param exponent
+ * @return
+ */
+double fastPow(double base, int exponent) {
+    double result = 1.0;
+    while (exponent > 0) {
+        if (exponent % 2 == 1) {
+            result *= base;
+        }
+        base *= base;
+        exponent /= 2;
+    }
+    return result;
+}
+
