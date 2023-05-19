@@ -7,7 +7,6 @@
 #include "universe.hxx"
 #include "cell.hxx"
 
-double G = 9.82;
 
 Universe::Universe(std::vector<Particle *> &particles, int dim, double rCut, double *lD, double epsilon, double sigma, int boundCond) : particles(particles), rCut(rCut), epsilon(epsilon),
 sigma(sigma), boundCond(boundCond)
@@ -65,7 +64,7 @@ ostream &operator<<(std::ostream &os, const Universe &universe)
  * Calculates the potential interaction forces between a particle and its neighboring particles
  * @param universe
  */
-void interactionForcesPotentiel(Universe & universe, bool ljReflexion, bool addGrav)
+void interactionForcesPotentiel(Universe & universe, bool ljReflexion, double G)
 {
     for (int x = 0; x < universe.nCD[0]; x++){
         for (int y = 0; y < universe.nCD[1]; y++){
@@ -115,7 +114,7 @@ void interactionForcesPotentiel(Universe & universe, bool ljReflexion, bool addG
                     //TODO: Add for Z
                 }
 
-                if(addGrav){
+                if(G > 0){
                     if (universe.dim == 2){
                         particleI->force.setY(particleI->force.getY() - particleI->masse * G);
                     }
@@ -209,15 +208,34 @@ void printVtk(vector<Particle *> particleList, ostream & outputStream){
 
 
 
+double kineticEnergy(Universe &universe){
+    double e = 0;
+    for (auto particle : universe.getParticles()){
+        e += particle->masse * particle->vitesse.norm()*particle->vitesse.norm();
+    }
+    return e/2;
+}
+
+
+
+
 /**
- * Uses Stromer Verlet integration scheme to simulate the movement of particles with potential force
+ * Uses the stromerVerlet integration method to calculate the new position for the system of particles
+ * in the universe. It considers the Lennard-Jones potential interaction between particles. It adapts to the boundary
+ * condition of the universe. And if demanded by the user it scales the velocity to limit the kinetic energy in
+ * the system
  * @param universe
- * @param tEnd
- * @param deltaT
- * @param outputStream
+ * @param tEnd : The duration of the simulation
+ * @param deltaT : intergration step
+ * @param visual : if true the output of the universe is printed as .vtu file to be visualized
+ * @param path : The path for the visualization, only makes sense when visual is true
+ * @param ljReflexion : Does reflexion on the boundary using the lennard jones force, it shouldn't be passed as true
+ * if the boundary condition of the universe (universe.boundCond) is either -1 or 1
+ * @param G : The uniform gravitational potential, if G = 0 the potential is not considered
+ * @param eCD : The value used for scaling the kinetic energy for the universe, if eCD = 0 there will be no scaling
  */
 void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
-                            bool visual, string path, bool ljReflexion, bool addGrav)
+                            bool visual, string path, bool ljReflexion, double G, double eCD)
 {
     if (ljReflexion){
         assert(universe.boundCond != -1);
@@ -226,7 +244,7 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
     // Calculate the initial forces
     vector<Particle *> particleList = universe.particles;
     vector<Vecteur> fOld;
-    interactionForcesPotentiel(universe, ljReflexion, addGrav);
+    interactionForcesPotentiel(universe, ljReflexion, G);
     for (auto particleI : particleList)
     {
         fOld.push_back(particleI->force);
@@ -241,7 +259,7 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
 
     while (t < tEnd)
     {
-        //
+        //Testing if to visualize
         if (visual && iter % visStepsPerFrame == 0){
             ofstream os;
             os.open(path + "sim" + to_string(frameCounter) + ".vtu");
@@ -250,7 +268,15 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
             frameCounter++;
         }
 
+        //Testing if to scale speed in the simulation
+        if (eCD > 0 && iter >0 && iter % 1000 == 0){
+            double beta = sqrt(eCD/ kineticEnergy(universe));
+            for (auto particle: particleList){
+                particle->vitesse = particle->vitesse * beta;
+            }
+        }
 
+        //Main part
         iter ++;
         t += deltaT;
         int index = 0;
@@ -309,7 +335,7 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
             }
         }
 
-        interactionForcesPotentiel(universe, ljReflexion, addGrav);
+        interactionForcesPotentiel(universe, ljReflexion, G);
 
         index = 0; // will be reused after this
         for (auto particleI : particleList)
