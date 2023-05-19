@@ -275,7 +275,6 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
                     particleI->vitesse.setZ( -particleI->vitesse.getZ());
                 }
             }
-            
             index++;
         }
     }
@@ -296,7 +295,6 @@ void Universe::calculateForcesSlowUni()
 const vector<Particle *> &Universe::getParticles() const {
     return particles;
 }
-
 
 
 

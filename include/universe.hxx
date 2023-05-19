@@ -33,8 +33,6 @@ public:
         friend void interactionForcesPotentiel(Universe & universe);
         friend void stromerVerletPotential(Universe & universe, double tEnd, double deltaT,bool visual, string path);
         friend void updateGrid(Universe & universe);
-
-        
         void calculateForcesUni();
         void calculateForcesSlowUni();
 

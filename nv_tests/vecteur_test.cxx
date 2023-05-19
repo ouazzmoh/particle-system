@@ -6,18 +6,18 @@
 
 // Common setup code for all tests
 class SetUpForAllTests : public ::testing::Test {
-protected:
-    Vecteur v1;
-    Vecteur v2;
-    void SetUp() override {
-        // Common setup code for all tests
-        v1 = Vecteur(3.0, 2.0, 1.0);
-        v2 = Vecteur(2,1,1);
-    }
+    protected:
+        Vecteur v1;
+        Vecteur v2;
+        void SetUp() override {
+            // Common setup code for all tests
+            v1 = Vecteur(3.0, 2.0, 1.0);
+            v2 = Vecteur(2,1,1);
+        }
 
-    void TearDown() override {
-        // Common teardown code for all tests
-    }
+        void TearDown() override {
+            // Common teardown code for all tests
+        }
 };
 
 
