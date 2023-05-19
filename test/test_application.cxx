@@ -49,7 +49,7 @@ int main() {
 
     printVtk(univ->getParticles(), init);
 
-    stromerVerletPotential(*univ, 1, d_t, init, "../../demo/");
+    stromerVerletPotential(*univ, 1, d_t, false, "../../demo/");
 
     printVtk(univ->getParticles(), end);
     init.close();

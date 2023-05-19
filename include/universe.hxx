@@ -27,13 +27,14 @@ private :
         //TODO: Use templates to define these
 public:
         Universe(std::vector<Particle*>& particles, int dim, double rCut, double* LD, double epsilon, double sigma, int boundCond =0);
-
+        std::vector<std::vector<Cell>> getGrid();
         friend ostream& operator<<(ostream &o, const Universe &);
 
         friend void interactionForcesPotentiel(Universe & universe);
         friend void stromerVerletPotential(Universe & universe, double tEnd, double deltaT,bool visual, string path);
         friend void updateGrid(Universe & universe);
 
+        
         void calculateForcesUni();
         void calculateForcesSlowUni();
 

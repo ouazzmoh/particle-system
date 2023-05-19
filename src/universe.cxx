@@ -42,6 +42,12 @@ sigma(sigma), boundCond(boundCond)
 };
 
 
+std::vector<std::vector<Cell>> Universe::getGrid()
+{
+    return grid;
+}
+
+
 
 ostream &operator<<(std::ostream &os, const Universe &universe)
 {
