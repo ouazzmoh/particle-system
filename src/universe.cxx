@@ -40,7 +40,7 @@ sigma(sigma), boundCond(boundCond)
         int y_cell = (int)(particle->getPosition().getY() / rCut);
         int z_cell = (int)(particle->getPosition().getZ() / rCut);
         assert(x_cell < nCD[0] && y_cell < nCD[1]);
-        grid[x_cell][y_cell].particles.push_back(particle);//2D
+        grid[x_cell][y_cell].particles.insert(particle);//2D
         particle->gridPosition.resize(2);
         particle->gridPosition[0] = x_cell;
         particle->gridPosition[1] = y_cell;
@@ -76,8 +76,7 @@ void interactionForcesPotentiel(Universe & universe, bool ljReflexion, double G)
         for (int y = 0; y < universe.nCD[1]; y++){
             //We are in the cell (x,y)
             //We loop over the neighboring cells, if they exist we consider the particles inside
-            for (int i = 0; i < universe.grid[x][y].getParticles().size(); i++){
-                auto particleI = universe.grid[x][y].getParticles()[i];
+            for (auto particleI : universe.grid[x][y].getParticles()){
                 particleI->force = Vecteur(0.0, 0.0, 0.0);
                 if (ljReflexion) {
                     //Detecting the closest boundary and choosing the direction
@@ -184,7 +183,7 @@ void updateGrid(Universe &universe, Particle * particle)
     //2D
     universe.grid[particle->gridPosition[0]][particle->gridPosition[1]].removeParticle(particle);
     if (x_cell >= 0 && x_cell < universe.nCD[0] && y_cell >= 0 && y_cell < universe.nCD[1]) {
-        universe.grid[x_cell][y_cell].particles.push_back(particle);//2D
+        universe.grid[x_cell][y_cell].particles.insert(particle);//2D
         particle->gridPosition[0] = x_cell;
         particle->gridPosition[1] = y_cell;
         //TODO: Z
@@ -345,9 +344,6 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
                     newZ = 100 - abs(fmod(newZ, universe.lD[2]));
                 }
                 particleI->position = Vecteur(newX, newY, newZ);
-                //The position is changed
-//                particleI->setCellPositionChanged(true);
-//                updateGrid(universe);
 
                 updateGrid(universe, particleI);
 

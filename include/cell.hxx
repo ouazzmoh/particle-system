@@ -1,26 +1,27 @@
 #ifndef CELL_H
 #define CELL_H
 
-#include <vector>
+#include <unordered_set>
 
 #include "particule.hxx"
 
 class Cell {
 private :
-        vector<Particle *> particles;
+        unordered_set<Particle * > particles;
 public :
 
         //Default constructor, useful to create the grid and initializes to empty vector
         Cell() : particles({}) {}
 
-        Cell(vector<Particle *> &particles): particles(particles){}
+        Cell(unordered_set<Particle *> &particles): particles(particles){}
+
+        void removeParticle(Particle * particle);
 
         friend class Universe;
         friend void updateGrid(Universe &universe, Particle *);
 
-        const vector<Particle *> &getParticles() const;
+        const unordered_set<Particle *> &getParticles() const;
 
-        void removeParticle(Particle * particle);
 };
 
 #endif
