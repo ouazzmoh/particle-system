@@ -9,24 +9,6 @@
 
 
 
-/**
- * Faster function to calculate power of integers
- * @param base
- * @param exponent
- * @return
- */
-double fastPow(double base, int exponent) {
-    double result = 1.0;
-    while (exponent > 0) {
-        if (exponent % 2 == 1) {
-            result *= base;
-        }
-        base *= base;
-        exponent /= 2;
-    }
-    return result;
-}
-
 
 Universe::Universe(std::vector<Particle *> &particles, int dim, double rCut, double *lD, double epsilon, double sigma, int boundCond) : particles(particles), rCut(rCut), epsilon(epsilon),
 sigma(sigma), boundCond(boundCond)
@@ -126,13 +108,13 @@ void interactionForcesPotentiel(Universe & universe, bool ljReflexion, double G)
                     double rCutRef = pow(2, 1.0 / 6.0) * universe.sigma;
                     if (rX < rCutRef && rX != 0){
                         //The direction depends on the speed direction, it is the opposite
-                        double flJMagnitude = -24 * universe.epsilon  * (1/(2*rX)) * pow(universe.sigma / (2*rX), 6) *
-                            (1 - 2 * pow(universe.sigma / (2*rX), 6));
+                        double flJMagnitude = -24 * universe.epsilon  * (1/(2*rX)) * fastPow(universe.sigma / (2*rX), 6) *
+                            (1 - 2 * fastPow(universe.sigma / (2*rX), 6));
                         particleI->force.setX(particleI->force.getX() + dirX * flJMagnitude);
                     }
                     if (rY < rCutRef && rY != 0){
-                        double flJMagnitude = -24 * universe.epsilon  * (1/(2*rY)) * pow(universe.sigma / (2*rY), 6) *
-                                              (1 - 2 * pow(universe.sigma / (2*rY), 6));
+                        double flJMagnitude = -24 * universe.epsilon  * (1/(2*rY)) * fastPow(universe.sigma / (2*rY), 6) *
+                                              (1 - 2 * fastPow(universe.sigma / (2*rY), 6));
                         particleI->force.setY(particleI->force.getY() + dirY * flJMagnitude);
                     }
                     //TODO: Add for Z
@@ -147,24 +129,42 @@ void interactionForcesPotentiel(Universe & universe, bool ljReflexion, double G)
                     }
                 }
 
-                //Interactions between particles
+                int a = 0;
+                if (particleI->getPosition().getX() >= 49 && particleI->position.getX() <= 50){
+                    a ++;
+                }
+
+                //Interactions with same cell particles
+                for (auto particleJ : universe.grid[x][y].getParticles()){
+                    if (!(particleI == particleJ)){
+                        Vecteur rIJVect = particleJ->position - particleI->position;
+                        double rIJ = rIJVect.norm();
+                        if (rIJ < universe.rCut && rIJ > 0){
+                            double fIJMagnitude = 24 * universe.epsilon * (1/(rIJ*rIJ)) *
+                                                  fastPow((universe.sigma /rIJ), 6) * (1- 2 * fastPow((universe.sigma/rIJ), 6));
+                            particleI->force = particleI->force + rIJVect * fIJMagnitude;
+                        }
+                    }
+                }
+
+                //Interactions with the neighbors
                 for (int dx = -1; dx <= 1; dx ++){
-                    for (int dy = -1; dy <= 1; dy++){
+                    for (int dy = -1; dy <= 1; dy ++){
+                        if (dx == 0 && dy == 0) continue;
                         if (x + dx < universe.nCD[0] && x + dx >= 0 && y + dy < universe.nCD[1] && y + dy >= 0){
                             for (auto particleJ : universe.grid[x + dx][y + dy].getParticles()){
-                                if (!(particleI == particleJ)){
-                                    Vecteur rIJVect = particleJ->position - particleI->position;
-                                    double rIJ = rIJVect.norm();
-                                    if (rIJ < universe.rCut && rIJ > 0){
-                                        double fIJMagnitude = 24 * universe.epsilon * (1/(rIJ*rIJ)) *
-                                                              pow((universe.sigma /rIJ), 6) * (1- 2 * pow((universe.sigma/rIJ), 6));
-                                        particleI->force = particleI->force + rIJVect * fIJMagnitude;
-                                    }
+                                Vecteur rIJVect = particleJ->position - particleI->position;
+                                double rIJ = rIJVect.norm();
+                                if (rIJ < universe.rCut && rIJ > 0){
+                                    double fIJMagnitude = 24 * universe.epsilon * (1/(rIJ*rIJ)) *
+                                                          fastPow((universe.sigma /rIJ), 6) * (1- 2 * fastPow((universe.sigma/rIJ), 6));
+                                    particleI->force = particleI->force + rIJVect * fIJMagnitude;
                                 }
                             }
                         }
                     }
                 }
+
             }
         }
     }

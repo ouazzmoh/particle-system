@@ -8,7 +8,7 @@
       </Points>
 <PointData Vectors="vector">
         <DataArray type="Float32" Name="Velocity" NumberOfComponents="3" format="ascii">
-5 -4 0 5 -4 0 5.00003 -4 0 4.99997 -4 0         </DataArray>
+5 -4 0 5 -4 0 5 -4 0 5 -4 0         </DataArray>
         <DataArray type="Float32" Name="Masse" format="ascii">
 1 1 1 1 
         </DataArray>

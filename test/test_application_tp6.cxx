@@ -11,7 +11,7 @@
 int main() {
 
 
-    double lD[2] = {250, 180};
+    double lD[2] = {408, 180};
     double epsilon = 1;
     double sigma = 1;
     double rCut = 2.5*sigma;
@@ -21,24 +21,36 @@ int main() {
 
     vector<Particle * > particleList;
 
-    //Cercle
+    //Circle
     int centerX = (int)round(lD[0] / 2); // Circle center X
     int centerY = 101; // Circle center Y
-    int radius = 15; // Circle radius (12% of the caracteristic distance
+    int radius = 15;
     int N1 = 395; // Number of particles
 
-    double spacingCercle = sqrt(M_PI * radius * radius / N1); // Average spacing between the particles
+    // Minimum distance between particles
+    double minDistance = pow(2.0, 1.0/6.0)/ sigma;
 
-    // Calculate the number of rings and number of particles per ring
+    // Spacing between the particles (minimum distance)
+    double spacingCercle = minDistance ;
+
+    // Calculate the number of rings
     int numRings = radius / spacingCercle;
-    int numParticlesPerRing = N1 / numRings;
+
+    // Initialize a counter for total particles
+    int totalParticles = 0;
+    int id = 0;
 
     for (int i = 0; i < numRings; i++) {
         double ringRadius = i * spacingCercle;
-        int numParticlesThisRing = numParticlesPerRing;
-        // Special case: the last ring takes all remaining particles
-        if (i == numRings - 1)
-            numParticlesThisRing = N1 - i * numParticlesPerRing;
+
+        // Calculate number of particles that can fit on this ring
+        int numParticlesThisRing = round(2.0 * M_PI * ringRadius / spacingCercle);
+
+        //The last ring takes all remaining particles, but do not exceed N1
+        if (i == numRings - 1 || totalParticles + numParticlesThisRing > N1) {
+            numParticlesThisRing = N1 - totalParticles;
+        }
+
         double angleIncrement = 2.0 * M_PI / numParticlesThisRing;
         for (int j = 0; j < numParticlesThisRing; j++) {
             // Calculate angle
@@ -48,57 +60,36 @@ int main() {
             double y = centerY + ringRadius * sin(angle);
             string type = "nil";
             Particle *particleToInsert = new Particle(Vecteur(x, y, 0.0),
-                                                      Vecteur(0.0, 10.0, 0.0), 1.0, i * numParticlesPerRing + j, Vecteur(0.0, 0.0, 0.0), type);
+                                                      Vecteur(0.0, -10.0, 0.0), 1.0, i * numParticlesThisRing + j, Vecteur(0.0, 0.0, 0.0), type);
             particleList.push_back(particleToInsert);
+            id ++;
+        }
+        totalParticles += numParticlesThisRing;
+
+        // If we've reached the maximum number of particles, break the loop
+        if (totalParticles >= N1) {
+            break;
         }
     }
 
+
+    int N2 = 17227;
+    double spacingRectangle = minDistance;
     //Rectangle
-    int N2 = 17227; // Number of particles
-    int length = 250; // Length of the rectangle
-    int height = 72; // Height of the rectangle
-
-    double area = (double)(length * height); // Area of the rectangle
-    double spacing = sqrt(area / N2); // Spacing between the particles
-
-    int numParticlesX = (int)(length / spacing); // Number of particles along X
-    int numParticlesY = (int)(height / spacing); // Number of particles along Y
-
-    for (int i = 0; i < numParticlesX; i++) {
-        for (int j = 0; j < numParticlesY; j++) {
-            // Calculate particle's position
-            double x = i * spacing;
-            double y = j * spacing;
-
+    for (int i = 0; i < 364; i++){
+        for (int j = 0; j < 47; j ++) {
             string type = "nil";
-            Particle *particleToInsert = new Particle(Vecteur(x, y, 0.0),
-                                                      Vecteur(0.0, 10.0, 0.0), 1.0, i * numParticlesY + j, Vecteur(0.0, 0.0, 0.0), type);
+            Particle *particleToInsert = new Particle(Vecteur(i * spacingRectangle, j * spacingRectangle, 0.0),
+                                                      Vecteur(0.0, 0.0, 0.0), 1.0, id, Vecteur(0.0, 0.0, 0.0),
+                                                      type);
             particleList.push_back(particleToInsert);
+            id++;
         }
+
     }
-
-    // Handle remaining particles
-    int remainingParticles = N2 - numParticlesX * numParticlesY;
-    for (int i = 0; i < remainingParticles; i++) {
-        double x = (i % numParticlesX) * spacing;
-        double y = (i / numParticlesX) * spacing;
-
-        string type = "nil";
-        Particle *particleToInsert = new Particle(Vecteur(x, y, 0.0),
-                                                  Vecteur(0.0, 10.0, 0.0), 1.0, numParticlesX * numParticlesY + i, Vecteur(0.0, 0.0, 0.0), type);
-        particleList.push_back(particleToInsert);
-    }
-
-
-
 
     Universe *univ = new Universe(particleList, 2, rCut, lD, epsilon, sigma);
-
-    ofstream init;
-    init.open("../../demo/initTP6.vtu");
-    printVtk(univ->getParticles(), init);
-    stromerVerletPotential(*univ, 29.5, 0.05, true, "../../demo/tp6_application/", true, G, eCD);
-    init.close();
+    stromerVerletPotential(*univ, 29.5, 0.00005, true, "../../demo/tp6_application/", false, G, eCD);
 
     return 0;
 };

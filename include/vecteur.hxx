@@ -7,6 +7,14 @@
 using namespace std;
 
 
+/**
+ * Faster function to calculate power of integers
+ * @param base
+ * @param exponent
+ * @return
+ */
+double fastPow(double base, int exponent);
+
 
 class Vecteur {
         double x, y, z;
@@ -16,7 +24,7 @@ public:
 
 
         double norm() const{
-                return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
+                return sqrt(x*x + y*y + z*z);
         };
         /**
          * Returns the distance to another point in polar cordinates ("this" is the reference)
@@ -26,7 +34,7 @@ public:
          * @return
          */
         double distanceToVect(Vecteur v) const{
-                return sqrt(pow(x - v.x, 2) + pow(y - v.y, 2) + pow(z - v.z, 2));
+                return sqrt((x - v.x)*(x - v.x) + (y - v.y)*(y - v.y) + (z - v.z)*(z - v.z));
         }
 
 
@@ -70,6 +78,8 @@ public:
 };
 
 ostream& operator<<(ostream&, const Vecteur &v);
+
+
 
 
 #endif

@@ -21,21 +21,15 @@ private:
         vector<int> gridPosition;
         Vecteur vitesse;
         double  masse;
-public:
-        void setPosition(const Vecteur &position);
-
-public:
-        bool isCellPositionChanged() const;
 
 private:
         int identifiant;
         Vecteur force;
         string type;
-        bool cellPositionChanged;
 public:
         Particle(Vecteur position, Vecteur vitesse, double masse, int identifiant, Vecteur force, string type):
         position(position), vitesse(vitesse),
-         masse(masse), identifiant(identifiant), force(force), type(type), cellPositionChanged(false){
+         masse(masse), identifiant(identifiant), force(force), type(type){
         }
 
 
@@ -75,6 +69,7 @@ public:
 
         friend class Universe;
 
+        void setPosition(const Vecteur &position);
 };
 
 
@@ -96,6 +91,10 @@ void stromerVerlet(vector<Particle*> &particleList, double tEnd, double deltaT, 
  * @param particleList : reference to a vector of pointers to particle instances
  */
 void calculateForces(vector<Particle *> &particleList);
+
+
+
+
 
 
 list<Particle> constructParticleList(int n, bool print);

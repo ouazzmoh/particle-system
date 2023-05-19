@@ -259,16 +259,9 @@ Vecteur Particle::getPosition() const {
 }
 
 
-bool Particle::isCellPositionChanged() const {
-    return cellPositionChanged;
-}
-
-void Particle::setCellPositionChanged(bool cellPositionChanged) {
-    Particle::cellPositionChanged = cellPositionChanged;
-}
 
 void Particle::setPosition(const Vecteur &position) {
-    Particle::position = Vecteur(2*100 - position.getX(), 2*100 - position.getY(), position.getZ());
+    Particle::position = Vecteur(position.getX(), position.getY(), position.getZ());
 }
 
 
