@@ -112,11 +112,12 @@ void interactionForcesPotentiel(Universe & universe, bool ljReflexion)
                     }
                     //TODO: Add for Z
                 }
+
                 //Interactions between particles
                 for (int dx = -1; dx <= 1; dx ++){
                     for (int dy = -1; dy <= 1; dy++){
                         if (x + dx < universe.nCD[0] && x + dx >= 0 && y + dy < universe.nCD[1] && y + dy >= 0){
-                            for (auto particleJ : universe.grid[x][y].getParticles()){
+                            for (auto particleJ : universe.grid[x + dx][y + dy].getParticles()){
                                 if (!(particleI == particleJ)){
                                     Vecteur rIJVect = particleJ->position - particleI->position;
                                     double rIJ = rIJVect.norm();
@@ -309,10 +310,10 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
                 if (particleI->position.getX() >= universe.lD[0] || particleI->position.getX() <= 0){
                     particleI->vitesse.setX( -particleI->vitesse.getX());
                 }
-                if (particleI->position.getY() >= universe.lD[1] || particleI->position.getY() <= 1){
+                if (particleI->position.getY() >= universe.lD[1] || particleI->position.getY() <= 0){
                     particleI->vitesse.setY( -particleI->vitesse.getY());
                 }
-                if (particleI->position.getZ() >= universe.lD[2] || particleI->position.getZ() <= 2){
+                if (particleI->position.getZ() >= universe.lD[2] || particleI->position.getZ() <= 0){
                     particleI->vitesse.setZ( -particleI->vitesse.getZ());
                 }
             }

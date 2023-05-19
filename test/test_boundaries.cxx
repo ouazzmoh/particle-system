@@ -6,7 +6,7 @@
 
 int main() {
     /**
-     * This test creates 3 universes, and tests different boundary conditions on them
+     * This test creates universes, and tests different boundary conditions on them
      */
 
     double lD[2] = {100, 100};
