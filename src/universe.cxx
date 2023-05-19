@@ -55,12 +55,11 @@ ostream &operator<<(std::ostream &os, const Universe &universe)
         for (int y = 0; y < universe.nCD[1]; y ++){
             os << "Cell:" << x << "," << y << "particles";
             for (auto particle : universe.grid[x][y].getParticles()){
-                os << particle << " ; ";
+                os << *particle << " ; ";
             }
             os << endl;
         }
     }
-
     return os;
 }
 
