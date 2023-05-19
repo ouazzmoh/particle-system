@@ -53,7 +53,7 @@ ostream &operator<<(std::ostream &os, const Universe &universe)
 {
     for (int x = 0; x < universe.nCD[0]; x ++){
         for (int y = 0; y < universe.nCD[1]; y ++){
-            os << "Cell:" << x << "," << y << "particles";
+            os << "Cell: " << x << " , " << y << " particles : ";
             for (auto particle : universe.grid[x][y].getParticles()){
                 os << *particle << " ; ";
             }
