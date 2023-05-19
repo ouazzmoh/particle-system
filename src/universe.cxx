@@ -278,8 +278,6 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
             
             index++;
         }
-
-
     }
 
 

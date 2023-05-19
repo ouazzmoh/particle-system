@@ -32,6 +32,7 @@ private:
         string type;
         bool cellPositionChanged;
 public:
+        Particle(){};
         Particle(Vecteur position, Vecteur vitesse, double masse, int identifiant, Vecteur force, string type):
         position(position), vitesse(vitesse),
          masse(masse), identifiant(identifiant), force(force), type(type), cellPositionChanged(false){}

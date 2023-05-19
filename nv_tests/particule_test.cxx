@@ -32,6 +32,6 @@ TEST_F(SetUpForAllTests, HandlesInfOperator) {
 }
 
 // On test que l'opérateur ==
-TEST_F(SetUpForAllTests, HandlesInfOperator) {
+TEST_F(SetUpForAllTests, HandlesEqEqOperator) {
     EXPECT_TRUE(p1 ==  p1);
 }
