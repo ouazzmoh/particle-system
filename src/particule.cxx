@@ -259,14 +259,6 @@ Vecteur Particle::getPosition() const {
 }
 
 
-vector<long> Particle::calculateGridIndex(double rCut){
-        vector<long> result;
-        result.push_back((long)(position.getX() / rCut));
-        result.push_back((long)(position.getY() / rCut));
-        result.push_back((long)(position.getZ() / rCut));
-        return result;
-}
-
 bool Particle::isCellPositionChanged() const {
     return cellPositionChanged;
 }

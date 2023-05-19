@@ -10,50 +10,58 @@
 
 int main() {
 
-    double lD[2] = {250, 40};
+    double lD[2] = {250, 100};
     double epsilon = 5;
     double sigma = 1;
     double rCut = 2.5*sigma;
     double d_t = 0.00005;
 
     vector<Particle * > particleList;
+    double spacing = pow(2, 1/6) /sigma;
 
+    int id = 0;
     //Red square
+    double xInit = 95;
+    double yInit = 45 + spacing;
+
     for (int i = 0; i < 40; i++){
         for ( int j = 0; j < 40; j ++) {
             string type = "nil";
-            Particle *particleToInsert = new Particle(Vecteur(60 + i , pow(2, 1/6)/sigma + 40 + j, 0.0),
-                                                      Vecteur(0.0, 10.0, 0.0), 1.0, i, Vecteur(0.0, 0.0, 0.0), type);
-            particleList.push_back(particleToInsert);
+                Particle *particleToInsert = new Particle(Vecteur(xInit + i * spacing, yInit + j * spacing, 0.0),
+                                                          Vecteur(0.0, -10.0, 0.0), 1.0, id, Vecteur(0.0, 0.0, 0.0),
+                                                          type);
+                particleList.push_back(particleToInsert);
+            id ++;
         }
     }
-    //Blue Square
+    //Blue Rectangle
+    double xInit2 = 35;
+    double yInit2 = 5;
     for (int i = 0; i < 160; i++){
-        for ( int j = 0; j < 40; j ++) {
+        for (int j = 0; j < 40; j ++) {
             string type = "nil";
-            Particle *particleToInsert = new Particle(Vecteur(i , j, 0.0),
-                                                      Vecteur(0.0, 0.0, 0.0), 1.0, i, Vecteur(0.0, 0.0, 0.0), type);
+            Particle *particleToInsert = new Particle(Vecteur(xInit2 + i * spacing, yInit2 + j * spacing, 0.0),
+                                                      Vecteur(0.0, 0.0, 0.0), 1.0, id, Vecteur(0.0, 0.0, 0.0),
+                                                      type);
             particleList.push_back(particleToInsert);
+            id++;
         }
 
     }
 
 
+
+//    ofstream init;
+//    init.open("../../demo/tp4_init.vtu");
+//    printVtk(particleList, init);
+//    init.close();
 
     Universe *univ = new Universe(particleList, 2, rCut, lD, epsilon, sigma);
 
-    ofstream init;
-    ofstream end;
-    init.open("../../demo/sim0.vtu");
-    end.open("../../demo/sim1.vtu");
 
-    printVtk(univ->getParticles(), init);
 
-    stromerVerletPotential(*univ, 1, d_t, init, "../../demo/");
+    stromerVerletPotential(*univ, 19.5, d_t, true, "../../demo/tp4_application/", false, 0, 0);
 
-    printVtk(univ->getParticles(), end);
-    init.close();
-    end.close();
 
     return 0;
 };

@@ -16,7 +16,7 @@ public :
         Cell(vector<Particle *> &particles): particles(particles){}
 
         friend class Universe;
-        friend void updateGrid(Universe &universe);
+        friend void updateGrid(Universe &universe, Particle *);
 
         const vector<Particle *> &getParticles() const;
 

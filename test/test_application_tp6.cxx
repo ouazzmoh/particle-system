@@ -16,6 +16,8 @@ int main() {
     double sigma = 1;
     double rCut = 2.5*sigma;
     double d_t = 0.00005;
+    double G = 12;
+    double eCD = 0.05;
 
     vector<Particle * > particleList;
 
@@ -95,12 +97,8 @@ int main() {
     ofstream init;
     init.open("../../demo/initTP6.vtu");
     printVtk(univ->getParticles(), init);
-
-//    stromerVerletPotential(*univ, 29.5, d_t, init, "../../demo/");
-
-//    printVtk(univ->getParticles(), init);
+    stromerVerletPotential(*univ, 29.5, 0.05, true, "../../demo/tp6_application/", true, G, eCD);
     init.close();
-//    end.close();
 
     return 0;
 };

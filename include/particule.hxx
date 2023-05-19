@@ -18,6 +18,7 @@ using namespace std;
 class Particle {
 private:
         Vecteur position;
+        vector<int> gridPosition;
         Vecteur vitesse;
         double  masse;
 public:
@@ -34,7 +35,8 @@ private:
 public:
         Particle(Vecteur position, Vecteur vitesse, double masse, int identifiant, Vecteur force, string type):
         position(position), vitesse(vitesse),
-         masse(masse), identifiant(identifiant), force(force), type(type), cellPositionChanged(false){}
+         masse(masse), identifiant(identifiant), force(force), type(type), cellPositionChanged(false){
+        }
 
 
         Vecteur getPosition() const;
@@ -52,15 +54,7 @@ public:
          */
         double interactionLJ(Particle *p,double epsilon, double sigma);
 
-        /**
-         * Calculate the index of the particle in the grid
-         * @param xMax
-         * @param yMax
-         * @param zMax
-         * @param nCD
-         * @return
-         */
-        vector<long> calculateGridIndex(double rCut);
+
 
 
         /**friends**/
@@ -75,6 +69,7 @@ public:
                                            bool ljReflexion, double G, double eCD);
 
         friend double kineticEnergy(Universe &universe);
+        friend void updateGrid(Universe &universe, Particle * particle);
 
         void setCellPositionChanged(bool cellPositionChanged);
 

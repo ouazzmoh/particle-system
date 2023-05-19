@@ -8,6 +8,26 @@
 #include "cell.hxx"
 
 
+
+/**
+ * Faster function to calculate power of integers
+ * @param base
+ * @param exponent
+ * @return
+ */
+double fastPow(double base, int exponent) {
+    double result = 1.0;
+    while (exponent > 0) {
+        if (exponent % 2 == 1) {
+            result *= base;
+        }
+        base *= base;
+        exponent /= 2;
+    }
+    return result;
+}
+
+
 Universe::Universe(std::vector<Particle *> &particles, int dim, double rCut, double *lD, double epsilon, double sigma, int boundCond) : particles(particles), rCut(rCut), epsilon(epsilon),
 sigma(sigma), boundCond(boundCond)
 {
@@ -39,6 +59,10 @@ sigma(sigma), boundCond(boundCond)
         int z_cell = (int)(particle->getPosition().getZ() / rCut);
         assert(x_cell < nCD[0] && y_cell < nCD[1]);
         grid[x_cell][y_cell].particles.push_back(particle);//2D
+        particle->gridPosition.resize(2);
+        particle->gridPosition[0] = x_cell;
+        particle->gridPosition[1] = y_cell;
+        //TODO: Z
     }
 };
 
@@ -70,7 +94,8 @@ void interactionForcesPotentiel(Universe & universe, bool ljReflexion, double G)
         for (int y = 0; y < universe.nCD[1]; y++){
             //We are in the cell (x,y)
             //We loop over the neighboring cells, if they exist we consider the particles inside
-            for (auto particleI : universe.grid[x][y].getParticles()){
+            for (int i = 0; i < universe.grid[x][y].getParticles().size(); i++){
+                auto particleI = universe.grid[x][y].getParticles()[i];
                 particleI->force = Vecteur(0.0, 0.0, 0.0);
                 if (ljReflexion) {
                     //Detecting the closest boundary and choosing the direction
@@ -105,8 +130,7 @@ void interactionForcesPotentiel(Universe & universe, bool ljReflexion, double G)
                             (1 - 2 * pow(universe.sigma / (2*rX), 6));
                         particleI->force.setX(particleI->force.getX() + dirX * flJMagnitude);
                     }
-
-                    else if (rY < rCutRef && rY != 0){
+                    if (rY < rCutRef && rY != 0){
                         double flJMagnitude = -24 * universe.epsilon  * (1/(2*rY)) * pow(universe.sigma / (2*rY), 6) *
                                               (1 - 2 * pow(universe.sigma / (2*rY), 6));
                         particleI->force.setY(particleI->force.getY() + dirY * flJMagnitude);
@@ -133,7 +157,7 @@ void interactionForcesPotentiel(Universe & universe, bool ljReflexion, double G)
                                     double rIJ = rIJVect.norm();
                                     if (rIJ < universe.rCut && rIJ > 0){
                                         double fIJMagnitude = 24 * universe.epsilon * (1/(rIJ*rIJ)) *
-                                            pow((universe.sigma /rIJ), 6) * (1- 2 * pow((universe.sigma/rIJ), 6));
+                                                              pow((universe.sigma /rIJ), 6) * (1- 2 * pow((universe.sigma/rIJ), 6));
                                         particleI->force = particleI->force + rIJVect * fIJMagnitude;
                                     }
                                 }
@@ -147,31 +171,27 @@ void interactionForcesPotentiel(Universe & universe, bool ljReflexion, double G)
 }
 
 
+
 /**
  * Called after change of position of particles, it removes a particle from the old cell and puts it in the new cell
  * @param universe
  */
-void updateGrid(Universe &universe)
+void updateGrid(Universe &universe, Particle * particle)
 {
-    for (int x = 0; x < universe.nCD[0]; x++){
-        for (int y = 0; y < universe.nCD[1]; y++){
-            for (auto particle : universe.grid[x][y].particles){
-                if (particle->isCellPositionChanged()){
-                    int x_cell = (int)(particle->getPosition().getX() / universe.rCut);
-                    int y_cell = (int)(particle->getPosition().getY() / universe.rCut);
-                    int z_cell = (int)(particle->getPosition().getZ() / universe.rCut);
-                    //2D
-                    universe.grid[x][y].removeParticle(particle);
-                    if (x_cell >= 0 && x_cell < universe.nCD[0] && y_cell >= 0 && y_cell < universe.nCD[1]) {
-                        universe.grid[x_cell][y_cell].particles.push_back(particle);//2D
-                    }
-                    //We set back the position to its initial state
-                    particle->setCellPositionChanged(false);
-                }
-            }
-        }
+    int x_cell = (int)(particle->getPosition().getX() / universe.rCut);
+    int y_cell = (int)(particle->getPosition().getY() / universe.rCut);
+    int z_cell = (int)(particle->getPosition().getZ() / universe.rCut);
+    //2D
+    universe.grid[particle->gridPosition[0]][particle->gridPosition[1]].removeParticle(particle);
+    if (x_cell >= 0 && x_cell < universe.nCD[0] && y_cell >= 0 && y_cell < universe.nCD[1]) {
+        universe.grid[x_cell][y_cell].particles.push_back(particle);//2D
+        particle->gridPosition[0] = x_cell;
+        particle->gridPosition[1] = y_cell;
+        //TODO: Z
     }
+
 }
+
 
 
 void printVtk(vector<Particle *> particleList, ostream & outputStream){
@@ -287,9 +307,7 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
                     particleI->position + (particleI->vitesse +
                                            particleI->force * (0.5 / particleI->masse) * deltaT) *
                                           deltaT;
-                //The position is changed -> declare the change
-                particleI->setCellPositionChanged(true);
-                updateGrid(universe);
+                updateGrid(universe, particleI);
                 fOld[index] = particleI->force;
                 index++;
             }
@@ -327,9 +345,12 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
                     newZ = 100 - abs(fmod(newZ, universe.lD[2]));
                 }
                 particleI->position = Vecteur(newX, newY, newZ);
-                //The position is changed -> declare the change
-                particleI->setCellPositionChanged(true);
-                updateGrid(universe);
+                //The position is changed
+//                particleI->setCellPositionChanged(true);
+//                updateGrid(universe);
+
+                updateGrid(universe, particleI);
+
                 fOld[index] = particleI->force;
                 index++;
             }
