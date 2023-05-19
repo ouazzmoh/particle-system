@@ -70,8 +70,9 @@ public:
         friend ostream& operator<<(ostream &o, const Particle &);
         friend void printVtk(vector<Particle *> particleList, ostream & outputStream);
 
-        friend void interactionForcesPotentiel(Universe & universe, bool ljRelexion);
-        friend void stromerVerletPotential(Universe & universe, double tEnd, double deltaT,bool visual,  string path, bool ljReflexion);
+        friend void interactionForcesPotentiel(Universe & universe, bool ljRelexion, bool addGrav);
+        friend void stromerVerletPotential(Universe & universe, double tEnd, double deltaT,bool visual,  string path,
+                                           bool ljReflexion, bool addGrav);
 
         void setCellPositionChanged(bool cellPositionChanged);
 

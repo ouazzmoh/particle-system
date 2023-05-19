@@ -30,8 +30,9 @@ public:
 
         friend ostream& operator<<(ostream &o, const Universe &);
 
-        friend void interactionForcesPotentiel(Universe & universe, bool ljReflexion);
-        friend void stromerVerletPotential(Universe & universe, double tEnd, double deltaT,bool visual, string path, bool ljReflexion);
+        friend void interactionForcesPotentiel(Universe & universe, bool ljReflexion, bool addGrav);
+        friend void stromerVerletPotential(Universe & universe, double tEnd, double deltaT,bool visual, string path,
+                                           bool ljReflexion, bool addGrav);
         friend void updateGrid(Universe & universe);
 
         void calculateForcesUni();
@@ -45,7 +46,8 @@ public:
 ostream& operator<<(ostream & o, const Universe & u);
 
 void printVtk(vector<Particle *> particleList, ostream & outputStream);
-void stromerVerletPotential(Universe & universe, double tEnd, double deltaT, bool visual,  string path, bool ljReflexion);
+void stromerVerletPotential(Universe & universe, double tEnd, double deltaT, bool visual,  string path,
+                            bool ljReflexion, bool addGrav);
 
 
 #endif

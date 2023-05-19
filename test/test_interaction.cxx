@@ -21,7 +21,7 @@ int main() {
     particleListAbs.push_back(particleToInsert1);
     particleListAbs.push_back(particleToInsert2);
     Universe *univAbs = new Universe(particleListAbs, 2, rCut, lD, epsilon, sigma, 0);
-    stromerVerletPotential(*univAbs, 20, 0.00005, true, "../../demo/interSimple/", true);
+    stromerVerletPotential(*univAbs, 20, 0.00005, true, "../../demo/interSimple/", true, true);
 
     return 0;
 };

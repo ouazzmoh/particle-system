@@ -7,6 +7,8 @@
 #include "universe.hxx"
 #include "cell.hxx"
 
+double G = 9.82;
+
 Universe::Universe(std::vector<Particle *> &particles, int dim, double rCut, double *lD, double epsilon, double sigma, int boundCond) : particles(particles), rCut(rCut), epsilon(epsilon),
 sigma(sigma), boundCond(boundCond)
 {
@@ -63,7 +65,7 @@ ostream &operator<<(std::ostream &os, const Universe &universe)
  * Calculates the potential interaction forces between a particle and its neighboring particles
  * @param universe
  */
-void interactionForcesPotentiel(Universe & universe, bool ljReflexion)
+void interactionForcesPotentiel(Universe & universe, bool ljReflexion, bool addGrav)
 {
     for (int x = 0; x < universe.nCD[0]; x++){
         for (int y = 0; y < universe.nCD[1]; y++){
@@ -111,6 +113,15 @@ void interactionForcesPotentiel(Universe & universe, bool ljReflexion)
                         particleI->force.setY(particleI->force.getY() + dirY * flJMagnitude);
                     }
                     //TODO: Add for Z
+                }
+
+                if(addGrav){
+                    if (universe.dim == 2){
+                        particleI->force.setY(particleI->force.getY() - particleI->masse * G);
+                    }
+                    else if (universe.dim == 3){
+                        particleI->force.setZ(particleI->force.getZ() - particleI->masse * G);
+                    }
                 }
 
                 //Interactions between particles
@@ -206,7 +217,7 @@ void printVtk(vector<Particle *> particleList, ostream & outputStream){
  * @param outputStream
  */
 void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
-                            bool visual, string path, bool ljReflexion)
+                            bool visual, string path, bool ljReflexion, bool addGrav)
 {
     if (ljReflexion){
         assert(universe.boundCond != -1);
@@ -215,7 +226,7 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
     // Calculate the initial forces
     vector<Particle *> particleList = universe.particles;
     vector<Vecteur> fOld;
-    interactionForcesPotentiel(universe, ljReflexion);
+    interactionForcesPotentiel(universe, ljReflexion, addGrav);
     for (auto particleI : particleList)
     {
         fOld.push_back(particleI->force);
@@ -298,7 +309,7 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
             }
         }
 
-        interactionForcesPotentiel(universe, ljReflexion);
+        interactionForcesPotentiel(universe, ljReflexion, addGrav);
 
         index = 0; // will be reused after this
         for (auto particleI : particleList)

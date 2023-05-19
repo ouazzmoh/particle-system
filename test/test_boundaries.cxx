@@ -27,7 +27,7 @@ int main() {
         particleListAbs.push_back(particleToInsert);
     }
     Universe *univAbs = new Universe(particleListAbs, 2, rCut, lD, epsilon, sigma, 0);
-    stromerVerletPotential(*univAbs, 20, 0.005, true, "../../demo/abs/", false);
+    stromerVerletPotential(*univAbs, 20, 0.005, true, "../../demo/abs/", false, false);
 
     //Reflexion
     for (int i = 0; i < 4; i++){
@@ -36,7 +36,7 @@ int main() {
         particleListRef.push_back(particleToInsert);
     }
     Universe *univRef = new Universe(particleListRef, 2, rCut, lD, epsilon, sigma, -1);
-    stromerVerletPotential(*univRef, 20, 0.005, true, "../../demo/ref/", false);
+    stromerVerletPotential(*univRef, 20, 0.005, true, "../../demo/ref/", false, false);
 
     //Periodic
     for (int i = 0; i < 4; i++){
@@ -45,7 +45,7 @@ int main() {
         particleListPer.push_back(particleToInsert);
     }
     Universe *univPer = new Universe(particleListPer, 2, rCut, lD, epsilon, sigma, 1);
-    stromerVerletPotential(*univPer, 20, 0.005, true, "../../demo/per/", false);
+    stromerVerletPotential(*univPer, 20, 0.005, true, "../../demo/per/", false, false);
 
     //RefLJlexion
     for (int i = 0; i < 4; i++){
@@ -54,7 +54,7 @@ int main() {
         particleListRefLJ.push_back(particleToInsert);
     }
     Universe *univRefLJ = new Universe(particleListRefLJ, 2, rCut, lD, epsilon, sigma, 0);
-    stromerVerletPotential(*univRefLJ, 20, 0.00005, true, "../../demo/refLj/", true);
+    stromerVerletPotential(*univRefLJ, 20, 0.00005, true, "../../demo/refLj/", true, false);
 
     return 0;
 };
