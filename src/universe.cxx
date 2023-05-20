@@ -1,5 +1,4 @@
 #include <string>
-#include <fstream>
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -11,7 +10,7 @@ using namespace std;
 
 
 Universe::Universe(std::vector<Particle *> &particles, int dim, double rCut, double *lD, double epsilon, double sigma, int boundCond) : particles(particles), rCut(rCut), epsilon(epsilon),
-sigma(sigma), boundCond(boundCond)
+                                                                                                                                        sigma(sigma), boundCond(boundCond)
 {
     if (rCut <= 0){
         throw invalid_argument("the value of rCut needs to be positive");
@@ -196,13 +195,13 @@ void interactionForcesPotentiel(Universe & universe, bool ljReflexion, double G)
                         rY = universe.lD[1] - particleI->position.getY();
                         dirY  = - 1;
                     }
-                    
+
 
                     double rCutRef = pow(2, 1.0 / 6.0) * universe.sigma;
                     if (rX < rCutRef && rX != 0){
                         //The direction depends on the speed direction, it is the opposite
                         double flJMagnitude = -24 * universe.epsilon  * (1/(2*rX)) * fastPow(universe.sigma / (2*rX), 6) *
-                            (1 - 2 * fastPow(universe.sigma / (2*rX), 6));
+                                              (1 - 2 * fastPow(universe.sigma / (2*rX), 6));
                         particleI->force.setX(particleI->force.getX() + dirX * flJMagnitude);
                     }
                     if (rY < rCutRef && rY != 0){
@@ -611,7 +610,7 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
                     (particleI->position + (particleI->vitesse +
                                             particleI->force * (0.5 / particleI->masse) * deltaT) *
                                            deltaT);
-                
+
                 double newX = particleI->position.getX();
                 double newY = particleI->position.getY();
                 if (newX >= universe.lD[0]){
@@ -620,7 +619,7 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
                 else if (newX < 0){
                     newX = 100 - abs(fmod(newX, universe.lD[0]));
                 }
-                
+
                 if (newY >= universe.lD[1]){
                     newY = fmod(newY, universe.lD[1]);
                 }
@@ -698,7 +697,7 @@ void Universe::setGrid3D(const vector<std::vector<std::vector<Cell>>> &grid3D) {
  * @param eCD : The value used for scaling the kinetic energy for the universe, if eCD = 0 there will be no scaling
  */
 void stromerVerletPotential3D(Universe &universe, double tEnd, double deltaT,
-                            bool visual, string path, bool ljReflexion, double G, double eCD)
+                              bool visual, string path, bool ljReflexion, double G, double eCD)
 {
     if (universe.boundCond != 0 && ljReflexion){
         throw invalid_argument("The Lennard-Jones boundary condition for reflexion cannot be applied unless boundCond"
@@ -828,7 +827,7 @@ void stromerVerletPotential3D(Universe &universe, double tEnd, double deltaT,
 }
 
 void stromerVerletPotential1D(Universe &universe, double tEnd, double deltaT,
-                            bool visual, string path, bool ljReflexion, double G, double eCD)
+                              bool visual, string path, bool ljReflexion, double G, double eCD)
 {
     if (universe.boundCond != 0 && ljReflexion){
         throw invalid_argument("The Lennard-Jones boundary condition for reflexion cannot be applied unless boundCond"
@@ -1002,7 +1001,6 @@ Universe::~Universe() {
     }
 
 }
-
 
 
 

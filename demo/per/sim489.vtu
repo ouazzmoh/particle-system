@@ -1,16 +1,16 @@
 <VTKFile type="UnstructuredGrid" version="0.1" byte_order="BigEndian">
   <UnstructuredGrid>
-    <Piece NumberOfPoints="4" NumberOfCells="0">
+    <Piece NumberOfPoints="1" NumberOfCells="0">
 <Points>
         <DataArray name="Position" type="Float32" NumberOfComponents="3" format="ascii">
-35.4 81.68 0 45.4 81.68 0 55.4007 81.68 0 65.3993 81.68 0 
+63.7162 50 0 
         </DataArray>
       </Points>
 <PointData Vectors="vector">
         <DataArray type="Float32" Name="Velocity" NumberOfComponents="3" format="ascii">
-5 -4 0 5 -4 0 5.00013 -4 0 4.99987 -4 0         </DataArray>
+-4.99827 0 0         </DataArray>
         <DataArray type="Float32" Name="Masse" format="ascii">
-1 1 1 1 
+1 
         </DataArray>
       </PointData>
       <Cells>

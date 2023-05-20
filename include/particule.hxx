@@ -57,6 +57,7 @@ public:
         friend void calculateForcesSlow(std::vector<Particle*> &particleList);
         friend std::ostream& operator<<(std::ostream &o, const Particle &);
         friend void printVtk(std::vector<Particle *> particleList, std::ostream & outputStream);
+        friend void printVtk(Universe & univ, std::ostream & outputStream);
 
         friend void interactionForcesPotentiel(Universe & universe, bool ljRelexion, double G);
         friend void interactionForcesPotentiel3D(Universe & universe, bool ljRelexion, double G);

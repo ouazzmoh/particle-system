@@ -3,6 +3,8 @@
 #include <random>
 #include <gtest/gtest.h>
 
+using namespace std;
+
 bool checkParticleInCell(Particle *p, unordered_set<Particle*> &vecParticles){
     for ( auto &particle : vecParticles){
         if (*particle == *p){
@@ -79,32 +81,28 @@ class SetUpForAllTests : public ::testing::Test {
 
 
 
-/*
+
 // test Absorption
 TEST_F(SetUpForAllTests, HandlesAbsorption) {
-    stromerVerletPotential(*univAbsorption, 20, 0.005, true, "../../demo/abs/", false, 0, 0);
-    ADD_FAILURE() << "univ : " << *univAbsorption;
+    stromerVerletPotential(*univAbsorption, 20, 0.005, false, "", false, 0, 0);
     bool b;
     for( int i = 0; i < univAbsorption->getGrid().size(); i++){
         for( int j = 0; j < univAbsorption->getGrid()[i].size(); j++){
             //ADD_FAILURE() << "i j  : " << i  << "djsh"<< j;
-            vector<Particle*> particlesIndex = univReflection->getGrid()[i][j].getParticles();
+            unordered_set<Particle*> particlesIndex = univAbsorption->getGrid()[i][j].getParticles();
             b = checkParticleInCell(particleToInsert_1,particlesIndex);
             //ADD_FAILURE() << b;
-            if (b  == true){
-                ADD_FAILURE() << "i j  : " << i  << "djsh"<< j;
-            }
             EXPECT_TRUE(!b);
         } 
     }
 }
-*/
+
 
 // test Reflection
 TEST_F(SetUpForAllTests, HandlesReflection) {
     // the particle is initially at grid[5][5]
     // and we expect it to return to grid[5][5] after reflection
-    stromerVerletPotential(*univReflection, 20, 0.005, true, "../../demo/ref/", false, 0, 0);
+    stromerVerletPotential(*univReflection, 20, 0.005, false, "", false, 0, 0);
     unordered_set<Particle*> particlesIndex_five_five = univReflection->getGrid()[5][5].getParticles();
     bool b  = checkParticleInCell(particleToInsert_2, particlesIndex_five_five);
     EXPECT_TRUE(b);
@@ -115,7 +113,7 @@ TEST_F(SetUpForAllTests, HandlesReflection) {
 TEST_F(SetUpForAllTests, HandlesPeriodic) {
     // the particle is initially at grid[5][5]
     // and we expect it to return to grid[5][5] when it is periodic
-    stromerVerletPotential(*univPeriodic, 20, 0.005, true, "../../demo/per/", false, 0, 0);
+    stromerVerletPotential(*univPeriodic, 20, 0.005, false, "", false, 0, 0);
     unordered_set<Particle*> particlesIndex_five_five = univReflection->getGrid()[5][5].getParticles();
     bool b  = checkParticleInCell(particleToInsert_2, particlesIndex_five_five);
     EXPECT_TRUE(b);
@@ -126,7 +124,7 @@ TEST_F(SetUpForAllTests, HandlesPeriodic) {
 TEST_F(SetUpForAllTests, HandlesRefLJlexion) {
     // the particle is initially at grid[5][5]
     // and we expect it to return to grid[5][5] when it is periodic
-    stromerVerletPotential(*univRefLJlexion, 20, 0.005, true, "../../demo/per/", true, 0, 0);
+    stromerVerletPotential(*univRefLJlexion, 20, 0.005, false, "", true, 0, 0);
     double tolerance = 1; // Define the tolerance for comparison
     EXPECT_NEAR(particleToInsert_4->getPosition().getX(),50, tolerance);
     EXPECT_NEAR(particleToInsert_4->getPosition().getY(),50, tolerance);

@@ -3,6 +3,8 @@
 #include <random>
 #include <gtest/gtest.h>
 
+using namespace std;
+
 bool checkParticleInCell(Particle *p, unordered_set<Particle*> &vecParticles){
     for ( auto &particle : vecParticles){
         if (*particle == *p){

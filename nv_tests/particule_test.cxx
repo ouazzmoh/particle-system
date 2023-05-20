@@ -2,6 +2,9 @@
 #include <gtest/gtest.h>
 #include "particule.hxx"
 
+
+
+using namespace std;
 // Common setup code for all tests
 class SetUpForAllTests : public ::testing::Test {
 protected:

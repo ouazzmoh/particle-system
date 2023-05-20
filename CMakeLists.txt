@@ -25,6 +25,7 @@ add_subdirectory(src)
 add_subdirectory(test)
 # Autres déclarations et configurations
 
+enable_testing()
 add_subdirectory(nv_tests)
 
 

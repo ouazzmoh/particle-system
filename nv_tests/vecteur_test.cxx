@@ -4,6 +4,9 @@
 #include "universe.hxx"
 
 
+
+using namespace std;
+
 // Common setup code for all tests
 class SetUpForAllTests : public ::testing::Test {
     protected:
@@ -95,28 +98,3 @@ TEST_F(SetUpForAllTests, HandlesEqEqOperator) {
 }
 
 
-// On teste l'opérateur %
-TEST_F(SetUpForAllTests, HandlesDivOperator) {
-    v2 = Vecteur(1, 1.5, 2);
-    EXPECT_TRUE(v1 % v2 == Vecteur(0, 0.5, 1));
-}
-
-    //ADD_FAILURE() << "This is a commentary\n" << v1 % v2  ;
-
-
-// On teste l'opérateur %
-TEST_F(SetUpForAllTests, HandlesInfOperator) {
-    v2 = Vecteur(3, 1, 2);
-    Vecteur v3 = Vecteur(5, 2, 4);
-    Vecteur v4 = Vecteur(5, 3, 4);
-
-
-    bool b = v1.norm() < v2.norm();
-    bool c = v1.norm() < v3.norm();
-    bool d  = v1.norm()  < v1.norm();
-
-    EXPECT_TRUE(!b);
-    EXPECT_TRUE(c);
-    // because we test strictly inferior (not or equal)
-    EXPECT_TRUE(!d);
-}

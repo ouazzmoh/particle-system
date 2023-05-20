@@ -1,6 +1,6 @@
 # Créer un executable à partir de fichiers sources
 add_executable(test_1  test_1.cxx)
-add_executable(listVSset  listVSset.cxx)
+add_executable(test_compStructures test_compStructures.cxx)
 add_executable(gravSystem  gravSystem.cxx)
 add_executable(test_universe test_universe.cxx)
 add_executable(test_potentiel test_potentiel.cxx)
@@ -19,10 +19,10 @@ target_link_libraries(test_1 vecteur)
 target_link_libraries(test_1 universe)
 target_link_libraries(test_1 cell)
 
-target_link_libraries(listVSset particules)
-target_link_libraries(listVSset vecteur)
-target_link_libraries(listVSset universe)
-target_link_libraries(listVSset cell)
+target_link_libraries(test_compStructures particules)
+target_link_libraries(test_compStructures vecteur)
+target_link_libraries(test_compStructures universe)
+target_link_libraries(test_compStructures cell)
 
 target_link_libraries(gravSystem particules)
 target_link_libraries(gravSystem vecteur)
