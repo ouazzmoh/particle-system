@@ -45,13 +45,13 @@ int main() {
     //double lD[3] = {10,10,10}; //Characteristic length depending on direction
     int dim = 1; // dimension
     double lD[3] = {10, 10, 0}; //Characteristic length depending on direction
-    vector<Particle *> particles2 = constructUniverse(2);
-    Universe *univ2 = new Universe(particles2, dim, 0.3, lD);
+    //vector<Particle *> particles2 = constructUniverse(2);
+    //Universe *univ2 = new Universe(particles2, dim, 0.3, lD);
 
     ofstream outputFile;
     outputFile.open("../../test_universe_algo.txt");
 
-    stromerVerletPotential(*univ2, 468.5, 0.015, outputFile);
+    // stromerVerletPotential(*univ2, 468.5, 0.015, outputFile);
     outputFile.close();
 
 }

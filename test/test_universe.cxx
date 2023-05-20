@@ -55,13 +55,15 @@ int main() {
     vector<Particle *> particles2  = constructUniverse(2);
     vector<Particle *> particles3  = constructUniverse(2);
     vector<Particle *> particles4  = constructUniverse(2);
-    Universe * univ = new Universe(particles, dim, rCut, lD);
-    Universe * univ2 = new Universe(particles2, dim, 0.3, lD);
-    Universe * univ3 = new Universe(particles3, dim, 0.5, lD);
-    Universe * univ4 = new Universe(particles4, dim, 1, lD);
-
+    
+    Universe * univ = new Universe(particles, dim, rCut, lD, 0, 0, 0);
+    Universe * univ2 = new Universe(particles2, dim, 0.3, lD, 0, 0, 0);
+    Universe * univ3 = new Universe(particles3, dim, 0.5, lD, 0, 0, 0);
+    Universe * univ4 = new Universe(particles4, dim, 1, lD, 0, 0, 0);
+    
     ofstream outputFile;
     outputFile.open("../test_universe.txt");
+    
     outputFile << "Grid for a universe with rCut = 0.1\n";
     outputFile << *univ << endl;
     outputFile << "\n\n\n";

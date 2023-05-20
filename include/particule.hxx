@@ -27,6 +27,7 @@ private:
         Vecteur force;
         string type;
 public:
+        Particle(){};
         Particle(Vecteur position, Vecteur vitesse, double masse, int identifiant, Vecteur force, string type):
         position(position), vitesse(vitesse),
          masse(masse), identifiant(identifiant), force(force), type(type){
@@ -65,7 +66,6 @@ public:
         friend double kineticEnergy(Universe &universe);
         friend void updateGrid(Universe &universe, Particle * particle);
 
-        void setCellPositionChanged(bool cellPositionChanged);
 
         friend class Universe;
 

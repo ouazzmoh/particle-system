@@ -49,19 +49,24 @@ sigma(sigma), boundCond(boundCond)
 };
 
 
+std::vector<std::vector<Cell>> Universe::getGrid()
+{
+    return grid;
+}
+
+
 
 ostream &operator<<(std::ostream &os, const Universe &universe)
 {
     for (int x = 0; x < universe.nCD[0]; x ++){
         for (int y = 0; y < universe.nCD[1]; y ++){
-            os << "Cell:" << x << "," << y << "particles";
+            os << "Cell: " << x << " , " << y << " particles : ";
             for (auto particle : universe.grid[x][y].getParticles()){
-                os << particle << " ; ";
+                os << *particle << " ; ";
             }
             os << endl;
         }
     }
-
     return os;
 }
 
@@ -372,11 +377,8 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
                     particleI->vitesse.setZ( -particleI->vitesse.getZ());
                 }
             }
-            
             index++;
         }
-
-
     }
 
 
@@ -395,7 +397,6 @@ void Universe::calculateForcesSlowUni()
 const vector<Particle *> &Universe::getParticles() const {
     return particles;
 }
-
 
 
 
