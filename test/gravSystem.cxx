@@ -33,7 +33,6 @@ int main() {
         gravitationalSystem.insert(gravitationalSystem.end(), jupiter);
         gravitationalSystem.insert(gravitationalSystem.end(), haley);
 
-        //TODO: Make the desired output-> only x and y + each iteration at a line
 
         ofstream outputFile;
         outputFile.open("../../coords.txt");

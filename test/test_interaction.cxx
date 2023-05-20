@@ -3,7 +3,7 @@
 
 
 
-
+using namespace std;
 int main() {
     double lD[2] = {100, 100};
     double epsilon = 5;

@@ -1,5 +1,7 @@
 #include "cell.hxx"
 
+using namespace std;
+
 void Cell::removeParticle(Particle * particle){
     particles.erase(particle);
 }

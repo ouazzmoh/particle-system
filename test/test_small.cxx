@@ -7,7 +7,7 @@
 
 
 
-
+using namespace std;
 int main() {
 
     double lD[2] = {250, 40};

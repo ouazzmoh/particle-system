@@ -7,7 +7,7 @@
 
 
 
-
+using namespace std;
 int main() {
 
 
@@ -89,7 +89,7 @@ int main() {
     }
 
     Universe *univ = new Universe(particleList, 2, rCut, lD, epsilon, sigma);
-    stromerVerletPotential(*univ, 29.5, 0.00005, true, "../../demo/tp6_application/", false, G, eCD);
+    startSimulation(*univ, 29.5, 0.00005, true, "../../demo/tp6_application/", true, G, eCD);
 
     return 0;
 };

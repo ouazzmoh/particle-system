@@ -1,6 +1,7 @@
 #include "vecteur.hxx"
 #include <cmath>
 
+using namespace std;
 
 bool Vecteur::operator<(const Vecteur &v2) const{
         return (*this).norm() < v2.norm();
@@ -44,21 +45,6 @@ Vecteur & Vecteur::operator-=(const Vecteur &v2){
         y -= v2.y;
         z -= v2.z;
         return *this;
-}
-
-
-Vecteur & Vecteur::operator%(const Vecteur &v2){
-    if (x > 0){
-        x = abs(fmod(x, v2.x));
-    }
-    else {
-
-    }
-
-    x = abs(fmod(x, v2.x));
-    y = abs(fmod(y, v2.y));
-    z = abs(fmod(z, v2.z));
-    return *this;
 }
 
 

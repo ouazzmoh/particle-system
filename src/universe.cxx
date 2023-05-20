@@ -7,19 +7,33 @@
 #include "universe.hxx"
 #include "cell.hxx"
 
-
+using namespace std;
 
 
 Universe::Universe(std::vector<Particle *> &particles, int dim, double rCut, double *lD, double epsilon, double sigma, int boundCond) : particles(particles), rCut(rCut), epsilon(epsilon),
 sigma(sigma), boundCond(boundCond)
 {
+    if (rCut <= 0){
+        throw invalid_argument("the value of rCut needs to be positive");
+    }
+
+    if (!(boundCond == 1 || boundCond == 0 ||boundCond == -1)){
+        throw invalid_argument("the value of boundCond needs to be either 0(Absorption), 1(Periodic), -1(Reflexive)");
+    }
+
     // Organize the particles in cells
     this->dim = dim;
     // lD
     this->lD = new double[dim];
     for (int i = 0; i < dim; i++)
     {
-        this->lD[i] = lD[i];
+        if (lD[i] > 0 && lD[i] >= rCut)
+        {
+            this->lD[i] = lD[i];
+        }
+        else{
+            throw invalid_argument("the value of lD needs to be positive and superior to rCut");
+        }
     }
     // nCD
     this->nCD = new long[dim];
@@ -39,7 +53,9 @@ sigma(sigma), boundCond(boundCond)
         for (auto particle: particles) {
             int x_cell = (int) (particle->getPosition().getX() / rCut);
             int y_cell = (int) (particle->getPosition().getY() / rCut);
-            assert(x_cell < nCD[0] && y_cell < nCD[1]);
+            if (!(x_cell < nCD[0] && y_cell < nCD[1])){
+                throw invalid_argument("the particle position surpasses the dimensions of the universe");
+            }
             grid[x_cell][y_cell].particles.insert(particle);//2D
             particle->gridPosition.resize(2);
             particle->gridPosition[0] = x_cell;
@@ -53,7 +69,10 @@ sigma(sigma), boundCond(boundCond)
         //Filling the grid
         for (auto particle: particles) {
             int x_cell = (int) (particle->getPosition().getX() / rCut);
-            assert(x_cell < nCD[0]);
+            if (!(x_cell < nCD[0])){
+                throw invalid_argument("the particle position x surpasses the dimension of the universe");
+            }
+
             grid1D[x_cell].particles.insert(particle);//2D
             particle->gridPosition.resize(1);
             particle->gridPosition[0] = x_cell;
@@ -74,7 +93,9 @@ sigma(sigma), boundCond(boundCond)
             int x_cell = (int) (particle->getPosition().getX() / rCut);
             int y_cell = (int) (particle->getPosition().getY() / rCut);
             int z_cell = (int) (particle->getPosition().getZ() / rCut);
-            assert(x_cell < nCD[0] && y_cell < nCD[1] && z_cell < nCD[2]);
+            if (!(x_cell < nCD[0] && y_cell < nCD[1] && z_cell < nCD[2])){
+                throw invalid_argument("the particle position surpasses the dimensions of the universe");
+            }
             grid3D[x_cell][y_cell][z_cell].particles.insert(particle);//2D
             particle->gridPosition.resize(3);
             particle->gridPosition[0] = x_cell;
@@ -142,6 +163,10 @@ ostream &operator<<(std::ostream &os, const Universe &universe)
  */
 void interactionForcesPotentiel(Universe & universe, bool ljReflexion, double G)
 {
+    if (universe.boundCond != 0 && ljReflexion){
+        throw invalid_argument("The Lennard-Jones boundary condition for reflexion cannot be applied unless boundCond"
+                               "for the universe is 0 (Absorption)");
+    }
     for (int x = 0; x < universe.nCD[0]; x++){
         for (int y = 0; y < universe.nCD[1]; y++){
             //We are in the cell (x,y)
@@ -171,7 +196,6 @@ void interactionForcesPotentiel(Universe & universe, bool ljReflexion, double G)
                         rY = universe.lD[1] - particleI->position.getY();
                         dirY  = - 1;
                     }
-                    double rZ = 0; //TODO : Third dimension
                     
 
                     double rCutRef = pow(2, 1.0 / 6.0) * universe.sigma;
@@ -234,6 +258,10 @@ void interactionForcesPotentiel(Universe & universe, bool ljReflexion, double G)
  */
 void interactionForcesPotentiel3D(Universe & universe, bool ljReflexion, double G)
 {
+    if (universe.boundCond != 0 && ljReflexion){
+        throw invalid_argument("The Lennard-Jones boundary condition for reflexion cannot be applied unless boundCond"
+                               "for the universe is 0 (Absorption)");
+    }
     for (int x = 0; x < universe.nCD[0]; x++){
         for (int y = 0; y < universe.nCD[1]; y++){
             for (int z = 0; z < universe.nCD[2]; z++){
@@ -336,6 +364,10 @@ void interactionForcesPotentiel3D(Universe & universe, bool ljReflexion, double 
  */
 void interactionForcesPotentiel1D(Universe & universe, bool ljReflexion, double G)
 {
+    if (universe.boundCond != 0 && ljReflexion){
+        throw invalid_argument("The Lennard-Jones boundary condition for reflexion cannot be applied unless boundCond"
+                               "for the universe is 0 (Absorption)");
+    }
     for (int x = 0; x < universe.nCD[0]; x++){
         //We are in the cell (x)
         for (auto particleI : universe.grid1D[x].getParticles()){
@@ -508,9 +540,11 @@ double kineticEnergy(Universe &universe){
 void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
                             bool visual, string path, bool ljReflexion, double G, double eCD)
 {
-    if (ljReflexion){
-        assert(universe.boundCond != -1);
+    if (universe.boundCond != 0 && ljReflexion){
+        throw invalid_argument("The Lennard-Jones boundary condition for reflexion cannot be applied unless boundCond"
+                               "for the universe is 0 (Absorption)");
     }
+
 
     // Calculate the initial forces
     vector<Particle *> particleList = universe.particles;
@@ -666,8 +700,9 @@ void Universe::setGrid3D(const vector<std::vector<std::vector<Cell>>> &grid3D) {
 void stromerVerletPotential3D(Universe &universe, double tEnd, double deltaT,
                             bool visual, string path, bool ljReflexion, double G, double eCD)
 {
-    if (ljReflexion){
-        assert(universe.boundCond != -1);
+    if (universe.boundCond != 0 && ljReflexion){
+        throw invalid_argument("The Lennard-Jones boundary condition for reflexion cannot be applied unless boundCond"
+                               "for the universe is 0 (Absorption)");
     }
 
     // Calculate the initial forces
@@ -795,9 +830,11 @@ void stromerVerletPotential3D(Universe &universe, double tEnd, double deltaT,
 void stromerVerletPotential1D(Universe &universe, double tEnd, double deltaT,
                             bool visual, string path, bool ljReflexion, double G, double eCD)
 {
-    if (ljReflexion){
-        assert(universe.boundCond != -1);
+    if (universe.boundCond != 0 && ljReflexion){
+        throw invalid_argument("The Lennard-Jones boundary condition for reflexion cannot be applied unless boundCond"
+                               "for the universe is 0 (Absorption)");
     }
+
 
     // Calculate the initial forces
     vector<Particle *> particleList = universe.particles;
@@ -924,6 +961,11 @@ void stromerVerletPotential1D(Universe &universe, double tEnd, double deltaT,
  */
 void startSimulation(Universe &universe, double tEnd, double deltaT,
                      bool visual, string path, bool ljReflexion, double G, double eCD){
+    if (universe.boundCond != 0 && ljReflexion){
+        throw invalid_argument("The Lennard-Jones boundary condition for reflexion cannot be applied unless boundCond"
+                               "for the universe is 0 (Absorption)");
+    }
+
     if (universe.dim == 2){
         stromerVerletPotential(universe, tEnd, deltaT, visual, path, ljReflexion, G, eCD);
     }

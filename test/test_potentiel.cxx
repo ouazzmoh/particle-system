@@ -8,7 +8,7 @@
 
 #include "universe.hxx"
 
-
+using namespace std;
 int main(){
 
         //TP4:Question1 systeme a deux particules on trace le potentiel en fonction de la distance

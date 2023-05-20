@@ -26,13 +26,12 @@ private :
         std::vector<std::vector<Cell>> grid;
         std::vector<std::vector<std::vector<Cell>>> grid3D;
 public:
-        void setGrid1D(const vector<Cell> &grid1D);
+        void setGrid1D(const std::vector<Cell> &grid1D);
 
-        void setGrid3D(const vector<std::vector<std::vector<Cell>>> &grid3D);
+        void setGrid3D(const std::vector<std::vector<std::vector<Cell>>> &grid3D);
 
 private:
         int boundCond = 0; //boundary condition, 0:absorption/ 1:periodic (portal) / -1:reflection
-        //TODO: Use templates to define these
 public:
 
         /**
@@ -47,19 +46,19 @@ public:
          */
         Universe(std::vector<Particle*>& particles, int dim, double rCut, double* LD, double epsilon, double sigma, int boundCond =0);
         std::vector<std::vector<Cell>> getGrid();
-        friend ostream& operator<<(ostream &o, const Universe &);
+        friend std::ostream& operator<<(std::ostream &o, const Universe &);
 
 
         friend void interactionForcesPotentiel(Universe & universe, bool ljReflexion, double G);
         friend void interactionForcesPotentiel3D(Universe & universe, bool ljReflexion, double G);
         friend void interactionForcesPotentiel1D(Universe & universe, bool ljReflexion, double G);
-        friend void stromerVerletPotential(Universe & universe, double tEnd, double deltaT,bool visual, string path,
+        friend void stromerVerletPotential(Universe & universe, double tEnd, double deltaT,bool visual, std::string path,
                                            bool ljReflexion, double G, double eCD);
-        friend void stromerVerletPotential3D(Universe & universe, double tEnd, double deltaT,bool visual,  string path,
+        friend void stromerVerletPotential3D(Universe & universe, double tEnd, double deltaT,bool visual,  std::string path,
                                              bool ljReflexion, double G, double eCD);
-        friend void stromerVerletPotential1D(Universe & universe, double tEnd, double deltaT,bool visual,  string path,
+        friend void stromerVerletPotential1D(Universe & universe, double tEnd, double deltaT,bool visual,  std::string path,
                                              bool ljReflexion, double G, double eCD);
-        friend void startSimulation(Universe & universe, double tEnd, double deltaT,bool visual,  string path,
+        friend void startSimulation(Universe & universe, double tEnd, double deltaT,bool visual,  std::string path,
                                              bool ljReflexion, double G, double eCD);
         friend void updateGrid(Universe & universe, Particle *);
         friend void updateGrid1D(Universe &universe, Particle * particle);
@@ -67,24 +66,24 @@ public:
         void calculateForcesUni();
         void calculateForcesSlowUni();
 
-        const vector<Particle *> &getParticles() const;
+        const std::vector<Particle *> &getParticles() const;
 };
 
 
 
-ostream& operator<<(ostream & o, const Universe & u);
+std::ostream& operator<<(std::ostream & o, const Universe & u);
 
-void printVtk(vector<Particle *> particleList, ostream & outputStream);
-void stromerVerletPotential(Universe & universe, double tEnd, double deltaT, bool visual,  string path,
+void printVtk(std::vector<Particle *> particleList, std::ostream & outputStream);
+void stromerVerletPotential(Universe & universe, double tEnd, double deltaT, bool visual,  std::string path,
                             bool ljReflexion, double G, double eCD);
-void stromerVerletPotential3D(Universe & universe, double tEnd, double deltaT,bool visual,  string path,
+void stromerVerletPotential3D(Universe & universe, double tEnd, double deltaT,bool visual,  std::string path,
                                      bool ljReflexion, double G, double eCD);
-void stromerVerletPotential1D(Universe & universe, double tEnd, double deltaT,bool visual,  string path,
+void stromerVerletPotential1D(Universe & universe, double tEnd, double deltaT,bool visual,  std::string path,
                                      bool ljReflexion, double G, double eCD);
 
 
 
-void startSimulation(Universe & universe, double tEnd, double deltaT,bool visual,  string path,
+void startSimulation(Universe & universe, double tEnd, double deltaT,bool visual,  std::string path,
                               bool ljReflexion, double G, double eCD);
 
 

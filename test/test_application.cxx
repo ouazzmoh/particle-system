@@ -5,7 +5,7 @@
 #include "universe.hxx"
 #include "particule.hxx"
 
-
+using namespace std;
 
 
 int main() {

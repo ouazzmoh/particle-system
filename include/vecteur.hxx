@@ -4,7 +4,6 @@
 #include <cmath>
 #include <ostream>
 
-using namespace std;
 
 
 /**
@@ -60,7 +59,7 @@ public:
 
 
         /**Showing vectors**/
-        friend ostream& operator<<(ostream&, const Vecteur &v);
+        friend std::ostream& operator<<(std::ostream&, const Vecteur &v);
 
         double getX() const;
 
@@ -77,7 +76,7 @@ public:
 
 };
 
-ostream& operator<<(ostream&, const Vecteur &v);
+std::ostream& operator<<(std::ostream&, const Vecteur &v);
 
 
 

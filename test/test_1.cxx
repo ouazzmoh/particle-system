@@ -2,7 +2,7 @@
 
 #include "vecteur.hxx"
 
-
+using namespace std;
 int main(){
         Vecteur v1;
         Vecteur v2;
