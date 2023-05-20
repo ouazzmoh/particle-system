@@ -1,6 +1,6 @@
 // Include necessary headers
 #include <gtest/gtest.h>
-#include <particule.hxx>
+#include "particule.hxx"
 
 // Common setup code for all tests
 class SetUpForAllTests : public ::testing::Test {

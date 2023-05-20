@@ -1,7 +1,7 @@
 // Include necessary headers
 #include <gtest/gtest.h>
-#include <vecteur.hxx>
-#include <universe.hxx>
+#include "vecteur.hxx"
+#include "universe.hxx"
 
 
 // Common setup code for all tests

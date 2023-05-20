@@ -1,9 +1,9 @@
-#include <universe.hxx>
-#include <particule.hxx>
+#include "universe.hxx"
+#include "particule.hxx"
 #include <random>
 #include <gtest/gtest.h>
 
-bool checkParticleInCell(Particle *p, vector<Particle*> &vecParticles){
+bool checkParticleInCell(Particle *p, unordered_set<Particle*> &vecParticles){
     for ( auto &particle : vecParticles){
         if (*particle == *p){
             return true;
@@ -105,7 +105,7 @@ TEST_F(SetUpForAllTests, HandlesReflection) {
     // the particle is initially at grid[5][5]
     // and we expect it to return to grid[5][5] after reflection
     stromerVerletPotential(*univReflection, 20, 0.005, true, "../../demo/ref/", false, 0, 0);
-    vector<Particle*> particlesIndex_five_five = univReflection->getGrid()[5][5].getParticles();
+    unordered_set<Particle*> particlesIndex_five_five = univReflection->getGrid()[5][5].getParticles();
     bool b  = checkParticleInCell(particleToInsert_2, particlesIndex_five_five);
     EXPECT_TRUE(b);
 }
@@ -116,7 +116,7 @@ TEST_F(SetUpForAllTests, HandlesPeriodic) {
     // the particle is initially at grid[5][5]
     // and we expect it to return to grid[5][5] when it is periodic
     stromerVerletPotential(*univPeriodic, 20, 0.005, true, "../../demo/per/", false, 0, 0);
-    vector<Particle*> particlesIndex_five_five = univReflection->getGrid()[5][5].getParticles();
+    unordered_set<Particle*> particlesIndex_five_five = univReflection->getGrid()[5][5].getParticles();
     bool b  = checkParticleInCell(particleToInsert_2, particlesIndex_five_five);
     EXPECT_TRUE(b);
 }

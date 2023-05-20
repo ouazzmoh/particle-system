@@ -1,9 +1,9 @@
-#include <universe.hxx>
-#include <particule.hxx>
+#include "universe.hxx"
+#include "particule.hxx"
 #include <random>
 #include <gtest/gtest.h>
 
-bool checkParticleInCell(Particle *p, vector<Particle*> &vecParticles){
+bool checkParticleInCell(Particle *p, unordered_set<Particle*> &vecParticles){
     for ( auto &particle : vecParticles){
         if (*particle == *p){
             return true;
@@ -74,19 +74,19 @@ protected:
 // test the initialization of the grid
 TEST_F(SetUpForAllTests, HandlesGridInitialPosition) {
 
-    vector<Particle*> particlesIndex_zero_zero = univ->getGrid()[0][0].getParticles();
+    unordered_set<Particle*> particlesIndex_zero_zero = univ->getGrid()[0][0].getParticles();
     bool b  = checkParticleInCell(particleToInsert, particlesIndex_zero_zero);
     EXPECT_TRUE(b);
 
-    vector<Particle*> particlesIndex_zero_one = univ->getGrid()[0][1].getParticles();
+    unordered_set<Particle*> particlesIndex_zero_one = univ->getGrid()[0][1].getParticles();
     bool c  = checkParticleInCell(particleToInsert, particlesIndex_zero_one);
     EXPECT_TRUE(!c);
 
-    vector<Particle*> particlesIndex_one_zero = univ->getGrid()[1][0].getParticles();
+    unordered_set<Particle*> particlesIndex_one_zero = univ->getGrid()[1][0].getParticles();
     bool d  = checkParticleInCell(particleToInsert, particlesIndex_one_zero);
     EXPECT_TRUE(!d);
 
-    vector<Particle*> particlesIndex_one_one = univ->getGrid()[1][1].getParticles();
+    unordered_set<Particle*> particlesIndex_one_one = univ->getGrid()[1][1].getParticles();
     bool e  = checkParticleInCell(particleToInsert, particlesIndex_one_one);
     EXPECT_TRUE(!e);
 
@@ -103,19 +103,19 @@ TEST_F(SetUpForAllTests, HandlesChangingPosition) {
     updateGrid(*univ, particleToInsert);
 
 
-    vector<Particle*> particlesIndex_zero_zero = univ->getGrid()[0][0].getParticles();
+    unordered_set<Particle*> particlesIndex_zero_zero = univ->getGrid()[0][0].getParticles();
     bool b  = checkParticleInCell(particleToInsert, particlesIndex_zero_zero);
     EXPECT_TRUE(!b);
 
-    vector<Particle*> particlesIndex_zero_one = univ->getGrid()[0][1].getParticles();
+    unordered_set<Particle*> particlesIndex_zero_one = univ->getGrid()[0][1].getParticles();
     bool c  = checkParticleInCell(particleToInsert, particlesIndex_zero_one);
     EXPECT_TRUE(!c);
 
-    vector<Particle*> particlesIndex_one_zero = univ->getGrid()[1][0].getParticles();
+    unordered_set<Particle*> particlesIndex_one_zero = univ->getGrid()[1][0].getParticles();
     bool d  = checkParticleInCell(particleToInsert, particlesIndex_one_zero);
     EXPECT_TRUE(d);
 
-    vector<Particle*> particlesIndex_one_one = univ->getGrid()[1][1].getParticles();
+    unordered_set<Particle*> particlesIndex_one_one = univ->getGrid()[1][1].getParticles();
     bool e  = checkParticleInCell(particleToInsert, particlesIndex_one_one);
     EXPECT_TRUE(!e);
 }
@@ -125,19 +125,19 @@ TEST_F(SetUpForAllTests, HandlesStormerVerlet) {
     //ADD_FAILURE() << "universe debut : \n" << *univ ;
     stromerVerletPotential(*univ, 2,0.5, false, "", false, 0,0);
     // The new expected position for the particle is grid[1][1]
-    vector<Particle*> particlesIndex_zero_zero = univ->getGrid()[0][0].getParticles();
+    unordered_set<Particle*> particlesIndex_zero_zero = univ->getGrid()[0][0].getParticles();
     bool b  = checkParticleInCell(particleToInsert, particlesIndex_zero_zero);
     EXPECT_TRUE(!b);
 
-    vector<Particle*> particlesIndex_zero_one = univ->getGrid()[0][1].getParticles();
+    unordered_set<Particle*> particlesIndex_zero_one = univ->getGrid()[0][1].getParticles();
     bool c  = checkParticleInCell(particleToInsert, particlesIndex_zero_one);
     EXPECT_TRUE(!c);
 
-    vector<Particle*> particlesIndex_one_zero = univ->getGrid()[1][0].getParticles();
+    unordered_set<Particle*> particlesIndex_one_zero = univ->getGrid()[1][0].getParticles();
     bool d  = checkParticleInCell(particleToInsert, particlesIndex_one_zero);
     EXPECT_TRUE(!d);
 
-    vector<Particle*> particlesIndex_one_one = univ->getGrid()[1][1].getParticles();
+    unordered_set<Particle*> particlesIndex_one_one = univ->getGrid()[1][1].getParticles();
     bool e  = checkParticleInCell(particleToInsert, particlesIndex_one_one);
     EXPECT_TRUE(e);
 }
