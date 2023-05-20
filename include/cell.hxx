@@ -19,6 +19,8 @@ public :
 
         friend class Universe;
         friend void updateGrid(Universe &universe, Particle *);
+        friend void updateGrid1D(Universe &universe, Particle * particle);
+        friend void updateGrid3D(Universe &universe, Particle * particle);
 
         const unordered_set<Particle *> &getParticles() const;
 

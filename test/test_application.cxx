@@ -62,7 +62,7 @@ int main() {
 
 
 
-    stromerVerletPotential(*univ, 19.5, d_t, true, "../../demo/tp4_application/", false, 0, 0);
+    startSimulation(*univ, 19.5, d_t, true, "../../demo/tp4_application/", false, 0, 0);
 
 
 

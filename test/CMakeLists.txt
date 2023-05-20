@@ -10,6 +10,7 @@ add_executable(test_application test_application.cxx)
 add_executable(test_boundaries test_boundaries.cxx)
 add_executable(test_interaction test_interaction.cxx)
 add_executable(test_application_tp6 test_application_tp6.cxx)
+add_executable(test_interaction3D test_interaction3D.cxx)
 
 # Fait le lien avec la bibliothèque créée précedemment
 # Les entêtes sont automatiquement détectés.
@@ -68,3 +69,8 @@ target_link_libraries(test_application_tp6 particules)
 target_link_libraries(test_application_tp6 vecteur)
 target_link_libraries(test_application_tp6 universe)
 target_link_libraries(test_application_tp6 cell)
+
+target_link_libraries(test_interaction3D particules)
+target_link_libraries(test_interaction3D vecteur)
+target_link_libraries(test_interaction3D universe)
+target_link_libraries(test_interaction3D cell)

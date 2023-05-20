@@ -60,11 +60,20 @@ public:
         friend void printVtk(vector<Particle *> particleList, ostream & outputStream);
 
         friend void interactionForcesPotentiel(Universe & universe, bool ljRelexion, double G);
+        friend void interactionForcesPotentiel3D(Universe & universe, bool ljRelexion, double G);
+        friend void interactionForcesPotentiel1D(Universe & universe, bool ljRelexion, double G);
         friend void stromerVerletPotential(Universe & universe, double tEnd, double deltaT,bool visual,  string path,
+                                           bool ljReflexion, double G, double eCD);
+        friend void stromerVerletPotential3D(Universe & universe, double tEnd, double deltaT,bool visual,  string path,
+                                           bool ljReflexion, double G, double eCD);
+        friend void stromerVerletPotential1D(Universe & universe, double tEnd, double deltaT,bool visual,  string path,
                                            bool ljReflexion, double G, double eCD);
 
         friend double kineticEnergy(Universe &universe);
         friend void updateGrid(Universe &universe, Particle * particle);
+        friend void updateGrid1D(Universe &universe, Particle * particle);
+        friend void updateGrid3D(Universe &universe, Particle * particle);
+
 
 
         friend class Universe;
