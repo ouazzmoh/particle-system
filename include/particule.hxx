@@ -66,7 +66,6 @@ public:
         friend double kineticEnergy(Universe &universe);
         friend void updateGrid(Universe &universe, Particle * particle);
 
-        void setCellPositionChanged(bool cellPositionChanged);
 
         friend class Universe;
 

@@ -60,11 +60,9 @@ int main() {
 
 
 
-<<<<<<< HEAD
-    stromerVerletPotential(*univ, 1, d_t, false, "../../demo/");
-=======
+
     stromerVerletPotential(*univ, 19.5, d_t, true, "../../demo/tp4_application/", false, 0, 0);
->>>>>>> main
+
 
 
     return 0;
