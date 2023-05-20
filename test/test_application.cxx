@@ -18,11 +18,12 @@ int main() {
 
     vector<Particle * > particleList;
     double spacing = pow(2, 1/6) /sigma;
+    double blocSpacing = 5;
 
     int id = 0;
     //Red square
     double xInit = 95;
-    double yInit = 45 + spacing;
+    double yInit = 45 + blocSpacing;
 
     for (int i = 0; i < 40; i++){
         for ( int j = 0; j < 40; j ++) {

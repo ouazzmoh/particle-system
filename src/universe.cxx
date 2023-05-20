@@ -128,11 +128,6 @@ void interactionForcesPotentiel(Universe & universe, bool ljReflexion, double G)
                     }
                 }
 
-                int a = 0;
-                if (particleI->getPosition().getX() >= 49 && particleI->position.getX() <= 50){
-                    a ++;
-                }
-
                 //Interactions with same cell particles
                 for (auto particleJ : universe.grid[x][y].getParticles()){
                     if (!(particleI == particleJ)){
@@ -263,6 +258,12 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
     // Calculate the initial forces
     vector<Particle *> particleList = universe.particles;
     vector<Vecteur> fOld;
+    //Show init state
+    ofstream os;
+    os.open(path + "sim0.vtu");
+    printVtk(universe.particles, os);
+    os.close();
+    //
     interactionForcesPotentiel(universe, ljReflexion, G);
     for (auto particleI : particleList)
     {
@@ -274,7 +275,7 @@ void stromerVerletPotential(Universe &universe, double tEnd, double deltaT,
 
     int fps = 30;
     int visStepsPerFrame = round(1.0 / (fps * deltaT));
-    int frameCounter = 0;
+    int frameCounter = 1;
 
     while (t < tEnd)
     {
