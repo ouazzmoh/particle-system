@@ -23,7 +23,7 @@ vector<Particle *> constructUniverse(double k){
 
     //Make sure what's the pow function is encodable
     auto start_time = chrono::steady_clock::now();
-    for (int i = 0; i < pow(pow(2.0,k), 3.0); ++i){
+    for (int i = 0; i < fastPow(fastPow(2.0,k), 3); ++i){
         string type = "(nil)";
         //Using auto deduces automatically the type
         Particle * particleToInsert = new Particle(Vecteur(dist(mt), dist(mt), dist(mt)),
@@ -46,7 +46,7 @@ int main() {
 
 
     // we will test class Universe and see the influence of rCut on the distribution of particles in the grid
-    double rCut= 0.1; //Cutoff distance for potential
+    double rCut= 1; //Cutoff distance for potential
     //int dim = 3 ; // dimension
     //double lD[3] = {10,10,10}; //Characteristic length depending on direction
     int dim = 1 ; // dimension
@@ -57,23 +57,9 @@ int main() {
     vector<Particle *> particles4  = constructUniverse(2);
     
     Universe * univ = new Universe(particles, dim, rCut, lD, 0, 0, 0);
-    Universe * univ2 = new Universe(particles2, dim, 0.3, lD, 0, 0, 0);
-    Universe * univ3 = new Universe(particles3, dim, 0.5, lD, 0, 0, 0);
+    Universe * univ2 = new Universe(particles2, dim, 1, lD, 0, 0, 0);
+    Universe * univ3 = new Universe(particles3, dim, 1, lD, 0, 0, 0);
     Universe * univ4 = new Universe(particles4, dim, 1, lD, 0, 0, 0);
-    
-    ofstream outputFile;
-    outputFile.open("../test_universe.txt");
-    
-    outputFile << "Grid for a universe with rCut = 0.1\n";
-    outputFile << *univ << endl;
-    outputFile << "\n\n\n";
-    outputFile << "Grid for a universe with rCut = 0.3\n";
-    outputFile << *univ2 << endl;
-    outputFile << "\n\n\n";
-    outputFile << "Grid for a universe with rCut = 0.5\n";
-    outputFile << *univ3 << endl;
-    outputFile << "\n\n\n";outputFile << "Grid for a universe with rCut = 1\n";
-    outputFile << *univ4 << endl;
-    outputFile.close();
+
 
 }

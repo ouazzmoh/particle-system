@@ -66,7 +66,7 @@ void calculateForces(vector<Particle *> & particleList) {
 
                 for (size_t j = i + 1; j < particleList.size(); j++) {
                         double rIJ = (*itParticleI)->getPosition().distanceToVect((*itParticleJ)->getPosition());
-                        Vecteur fIJ = ((*itParticleJ)->getPosition() - (*itParticleI)->getPosition()) * (((*itParticleI)->masse * (*itParticleJ)->masse) / pow(rIJ, 3));
+                        Vecteur fIJ = ((*itParticleJ)->getPosition() - (*itParticleI)->getPosition()) * (((*itParticleI)->masse * (*itParticleJ)->masse) / fastPow(rIJ, 3));
                         forces[i] += fIJ;
                         // fJI = -fIJ
                         forces[j] += fIJ * (-1);
@@ -84,7 +84,7 @@ void calculateForcesSlow(vector<Particle *> & particleList) {
                         if (!(*particleI == *particleJ)){
                                 double rIJ = particleI->getPosition().distanceToVect(particleJ->getPosition());
                                 // f12 = ((x2 - x1)i + (y2-y1)j + (z2 - z1)k) m1*m2 / r12^3   (We express the vector r12 in cartesian coords)
-                                fI = fI + (particleJ->getPosition() - particleI->getPosition()) * ((particleI->masse * particleJ->masse) / pow(rIJ, 3));
+                                fI = fI + (particleJ->getPosition() - particleI->getPosition()) * ((particleI->masse * particleJ->masse) / fastPow(rIJ, 3));
                         }
                 }
                 particleI->force = fI;

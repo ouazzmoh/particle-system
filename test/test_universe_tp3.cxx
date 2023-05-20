@@ -17,12 +17,13 @@ Universe * constructUniverse(double k){
     random_device rd;
     mt19937 mt(rd());
     uniform_real_distribution<double> dist(0.0, 1.0);
+    double lD[2] = {10, 10};
 
     vector<Particle*> particleList;
 
     //Make sure what's the pow function is encodable
     auto start_time = chrono::steady_clock::now();
-    for (int i = 0; i < pow(pow(2.0,k), 3.0); ++i){
+    for (int i = 0; i < fastPow(fastPow(2.0,k), 3.0); ++i){
         string type = "(nil)";
         //Using auto deduces automatically the type
         Particle * particleToInsert = new Particle(Vecteur(dist(mt), dist(mt), dist(mt)), Vecteur(7.0, 7.0, 7.0)
@@ -34,14 +35,12 @@ Universe * constructUniverse(double k){
     cout << "Time taken for the insertion with size = 2**(3 * " << k << ") ----> "
          << chrono::duration<double, milli>(exec_time).count() << "ms" << endl;
 
-    return new Universe(particleList, 0, 0, 0, 0, 0);
+    return new Universe(particleList, 2, 1, lD, 0, 0);
 }
 
 
 int main() {
 
-    //TP3-Question7: test insertion en utilisant les listes
-//    Universe * universe1 = constructUniverse(5);
 
     //TP3-Question 8 - 9 : Calcule des interactions
     //Pour diviser le temps de calcul en 2, On utilise la 3eme loi de Newton
