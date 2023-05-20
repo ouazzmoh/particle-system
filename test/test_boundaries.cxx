@@ -56,6 +56,26 @@ int main() {
     Universe *univRefLJ = new Universe(particleListRefLJ, 2, rCut, lD, epsilon, sigma, 0);
     stromerVerletPotential(*univRefLJ, 20, 0.00005, true, "../../demo/refLj/", true, 0, 0);
 
+
+    delete univAbs;
+    delete univPer;
+    delete univRef;
+    delete univRefLJ;
+    for (auto particle : particleListAbs){
+        delete particle;
+    }
+    for (auto particle : particleListRef){
+        delete particle;
+    }
+    for (auto particle : particleListRefLJ){
+        delete particle;
+    }
+    for (auto particle : particleListPer){
+        delete particle;
+    }
+
+
+
     return 0;
 };
 

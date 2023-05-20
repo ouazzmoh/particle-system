@@ -22,6 +22,10 @@ int main() {
     particleListAbs.push_back(particleToInsert2);
     Universe *univAbs = new Universe(particleListAbs, 3, rCut, lD, epsilon, sigma, 0);
     startSimulation(*univAbs, 50, 0.00005, true, "../../demo/interSimple3D/", false, 0.0, 0);
+    delete univAbs;
+    for (auto particle : particleListAbs){
+        delete particle;
+    }
 
     return 0;
 };

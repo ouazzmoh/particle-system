@@ -978,4 +978,31 @@ void startSimulation(Universe &universe, double tEnd, double deltaT,
 }
 
 
+Universe::~Universe() {
+    // Free the resources allocated in the constructor
+    delete[] lD;
+    delete[] nCD;
+    //We choose not to delete the particles if the universe is deleted
+
+    if (dim == 1) {
+        grid1D.clear();
+    } else if (dim == 2) {
+        for (auto &yAxe: grid) {
+            yAxe.clear();
+        }
+        grid.clear();
+    } else if (dim == 3) {
+        for (auto &yAxe: grid3D) {
+            for (auto &zAxe : yAxe){
+                zAxe.clear();
+            }
+            yAxe.clear();
+        }
+        grid3D.clear();
+    }
+
+}
+
+
+
 

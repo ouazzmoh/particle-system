@@ -3,7 +3,7 @@
     <Piece NumberOfPoints="4" NumberOfCells="0">
 <Points>
         <DataArray name="Position" type="Float32" NumberOfComponents="3" format="ascii">
-74.85 30.12 0 84.85 30.12 0 94.85 30.12 0 104.85 30.12 0 
+74.675 30.26 0 84.675 30.26 0 94.675 30.26 0 104.675 30.26 0 
         </DataArray>
       </Points>
 <PointData Vectors="vector">

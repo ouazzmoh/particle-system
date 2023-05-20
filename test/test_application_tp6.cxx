@@ -91,5 +91,10 @@ int main() {
     Universe *univ = new Universe(particleList, 2, rCut, lD, epsilon, sigma);
     startSimulation(*univ, 29.5, 0.00005, true, "../../demo/tp6_application/", true, G, eCD);
 
+    delete univ;
+    for (auto particle : particleList){
+        delete particle;
+    }
+
     return 0;
 };

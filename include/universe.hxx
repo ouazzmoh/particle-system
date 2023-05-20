@@ -49,6 +49,9 @@ public:
         friend std::ostream& operator<<(std::ostream &o, const Universe &);
 
 
+
+
+
         friend void interactionForcesPotentiel(Universe & universe, bool ljReflexion, double G);
         friend void interactionForcesPotentiel3D(Universe & universe, bool ljReflexion, double G);
         friend void interactionForcesPotentiel1D(Universe & universe, bool ljReflexion, double G);
@@ -67,6 +70,11 @@ public:
         void calculateForcesSlowUni();
 
         const std::vector<Particle *> &getParticles() const;
+
+        /**
+         * Deletes parameters proper to the universe lD, nCD and the grid, it keeps the particles
+         */
+        ~Universe();
 };
 
 
